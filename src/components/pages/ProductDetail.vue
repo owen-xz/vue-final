@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :active.sync="isLoading"></loading>
     <div class="container">
       <div class="row">
         <div class="col-md-6 mt-4">
@@ -126,6 +127,7 @@ export default {
     getProducts(){
       const vm = this;
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products/all`;
+      vm.isLoading = true;
       this.$http.get(api).then((response) => {
         vm.product = (response.data.products).find(item => {
           if(item.id === this.$route.params.id){
@@ -136,6 +138,7 @@ export default {
           if(item.origin_price !== item.price && item.id !== vm.product.id)
             return true;
         })
+        vm.isLoading = false;
       });
     }
   },
