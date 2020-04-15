@@ -19,11 +19,9 @@
                 </td>
                 <td class="align-middle d-none d-md-table-cell">
                   <a href="#" @click.prevent="getProduct(item.product.id)">
-                    {{ item.product.title }}
-                    <div class="text-success" v-if="item.coupon">
-                      <small>已套用優惠卷</small>
-                    </div>  
+                    {{ item.product.title }}  
                   </a>
+                  <small class="text-success d-block" v-if="item.coupon">已套用優惠卷</small>
                 </td>
                 <td class="align-middle d-none d-md-table-cell">{{ item.qty }}/{{ item.product.unit }}</td>
                 <td class="align-middle text-right d-none d-md-table-cell">{{ item.total | currency }}</td>
@@ -168,6 +166,11 @@ export default {
     }
   },
   methods: {
+    getProduct(id){
+      this.$router.push({
+        path: `/product/${id}`,
+      })
+    },
     getCart(){
       const vm = this;
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;

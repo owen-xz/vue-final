@@ -14,13 +14,13 @@
           <div class="row">
             <div class="col-lg-4 col-md-6 mb-4" v-for="item in filterProducts" :key="item.id">
               <div class="card border-0 shadow-sm h-100 card-hover">
-                <div @click.prevent="getProduct(item.id)" style="cursor: pointer;">
+                <div @click="getProduct(item.id)" style="cursor: pointer;">
                   <div class="bg-cover" style="height: 200px;"
                     :style="{backgroundImage: `url(${item.imageUrl})`}">
                   </div>
                   <div class="card-body">
                     <span class="badge badge-desktop text-content p-2 float-right ml-2">{{ item.category }}</span>
-                    <h5 class="card-title text-dark h3">{{ item.title }}</h5>
+                    <h5 class="card-title text-dark h4">{{ item.title }}</h5>
                     <div class="d-flex justify-content-between align-items-baseline">
                       <div class="h5" v-if="item.price === item.origin_price"> {{ item.origin_price | currency }} </div> 
                       <del class="h6 text-del" v-if="item.price !== item.origin_price"> {{ item.origin_price | currency }} </del>
@@ -94,7 +94,6 @@ export default {
       vm.status.loadingItem = id;
       this.$http.get(api).then((response) => {
         vm.product = response.data.product;
-        vm.product.num = 1;
         vm.$router.push({
           path: `/product/${vm.product.id}`,
         })

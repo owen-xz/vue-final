@@ -139,12 +139,13 @@
                   </div>
                 </div>
                 <hr>
-
+                <!--
                 <div class="form-group">
                   <label for="description">產品描述</label>
                   <textarea type="text" class="form-control" id="description"
                     placeholder="請輸入產品描述" v-model="tempProduct.description"></textarea>
                 </div>
+                -->
                 <div class="form-group">
                   <label for="content">說明內容</label>
                   <textarea type="text" class="form-control" id="content"

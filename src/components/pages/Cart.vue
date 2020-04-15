@@ -128,7 +128,6 @@ export default {
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
       vm.isLoading = true;
       this.$http.get(api).then((response) => {
-        console.log(response.data)
         vm.cart = response.data.data;
         vm.$emit('getCartNum', vm.cart.carts.length);
         vm.isLoading = false;
