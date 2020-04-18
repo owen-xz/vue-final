@@ -7,6 +7,9 @@
 <script>
 export default {
   name: 'App',
+  methods: {
+    
+  },
 }
 </script>
 
@@ -16,7 +19,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $title;
-  margin-top: 64px;
+  margin-top: 63px;
 }
 .bg-cover{
   background-size: cover;
@@ -30,3 +33,4 @@ export default {
   margin-top: 66.4px;
 }
 </style>
+

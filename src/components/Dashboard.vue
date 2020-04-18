@@ -1,22 +1,18 @@
 <template>
   <div>
-    <Navbar/>
     <Alert></Alert>
-    <Sidebar :activeLink="route"></Sidebar>
-    <div class="container-fluid">
-      <div class="row">
-        <main role="main" class=" ml-lg-auto col-lg-10 px-4">
-          <router-view @sendRoute="setRoute"></router-view>
-        </main>
-      </div>
-    </div>
+    <Navbar :activeLink="route"></Navbar>
+    <div class="row no-gutters">
+      <Sidebar :activeLink="route" class="col-lg-2"></Sidebar>
+      <router-view @sendRoute="setRoute" class="px-4 col-lg-10"></router-view>
+    </div>    
   </div>
 </template>
 
 <script>
-import Navbar from './Navbar';
-import Sidebar from './DashboardSidebar';
-import Alert from './AlertMessage'
+import Navbar from './Navbar.vue';
+import Sidebar from './DashboardSidebar.vue';
+import Alert from './AlertMessage.vue'
 export default {
   components:{
     Navbar,
@@ -31,6 +27,15 @@ export default {
   methods: {
     setRoute(route){
       this.route = route;
+    },
+    signout(){
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/logout`;
+      this.$http.post(api).then((response) => {
+        if(response.data.success){
+          vm.$router.push('/login');
+        }
+      })
     }
   },
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg bg-light fixed-top py-1">
       <div class="container-fluid">
         <button class="navbar-toggler text-title" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-bars"></i>
@@ -14,16 +14,26 @@
             <div class="bg-danger cart-num d-flex justify-content-center align-items-center text-white" v-if="cartNum>0">{{ cartNum }}</div>
             <i class="fas fa-shopping-cart fa-2x"></i>
           </router-link>
-          <router-link class="nav-link p-2" to="/admin/products"><i class="fas fa-cog fa-2x"></i></router-link>
+          <div class="dropdown">
+            <a href="#" class="nav-link p-2" to="/admin/products" data-toggle="dropdown"><i class="fas fa-cog fa-2x"></i></a type="button">
+            <div class="dropdown-menu dropdown-menu-right">
+              <router-link class="dropdown-item" to="/admin/products" :class="{'active': activeLink==='AdminProducts'}">商品管理</router-link>
+              <router-link class="dropdown-item" to="/admin/coupon" :class="{'active': activeLink==='AdminCoupon'}">優惠卷管理</router-link>
+              <router-link class="dropdown-item" to="/admin/order" :class="{'active': activeLink==='AdminOrder'}">訂單管理</router-link>
+              <div class="dropdown-divider"></div>
+              <router-link class="dropdown-item" to="/login" v-if="!isLogin">登入</router-link>
+              <a href="#" class="dropdown-item" @click.prevent="signout" v-else>登出</a>
+            </div>
+          </div>
         </div>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto text-center">
             <li class="nav-item">
-              <router-link class="nav-link header-link" :class="{'active': route==='Products'}" to="/products">美味菜單</router-link>
+              <router-link class="nav-link header-link" :class="{'active': activeLink==='Products'}" to="/products">美味菜單</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link header-link" :class="{'active': route==='Order'}" to="/order">我的訂單</router-link>
+              <router-link class="nav-link header-link" :class="{'active': activeLink==='Order'}" to="/order">我的訂單</router-link>
             </li>          
           </ul>
         </div>
@@ -33,43 +43,58 @@
             <div class="bg-danger cart-num d-flex justify-content-center align-items-center text-white" v-if="cartNum>0">{{ cartNum }}</div>
             <i class="fas fa-shopping-cart fa-2x"></i>
           </router-link>
-          <router-link class="nav-link p-2" to="/admin/products"><i class="fas fa-cog fa-2x"></i></router-link>
+          <div class="dropdown">
+            <a href="#" class="nav-link p-2" to="/admin/products" data-toggle="dropdown"><i class="fas fa-cog fa-2x"></i></a type="button">
+            <div class="dropdown-menu dropdown-menu-right">
+              <router-link class="dropdown-item" to="/admin/products" :class="{'active': activeLink==='AdminProducts'}">商品管理</router-link>
+              <router-link class="dropdown-item" to="/admin/coupon" :class="{'active': activeLink==='AdminCoupon'}">優惠卷管理</router-link>
+              <router-link class="dropdown-item" to="/admin/order" :class="{'active': activeLink==='AdminOrder'}">訂單管理</router-link>
+              <div class="dropdown-divider"></div>
+              <router-link class="dropdown-item" to="/login" v-if="!isLogin">登入</router-link>
+              <a href="#" class="dropdown-item" @click.prevent="signout" v-else>登出</a>
+            </div>
+          </div>
+          
         </div>
           
       </div> 
-    </nav>
-
-    <!--
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
-      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#" @click.prevent="signout">Sign out</a>
-        </li>
-        <li class="nav-item text-nowrap">
-          <router-link class="nav-link" to="/admin/products">管理後台</router-link>
-        </li>
-      </ul>
-    </nav>
-    -->
-
-      
+    </nav>     
   </div>
 </template>
 
 <script>
+import $ from 'jquery';
 export default {
   props: ['cartNum', 'activeLink'],
   data(){
     return {
-      route: ''
+      isLogin: false
+    }
+  },
+  methods: {
+    signout(){
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/logout`;
+      this.$http.post(api).then((response) => {
+        if(response.data.success){
+          vm.$router.push('/');
+        }
+      })
     }
   },
   watch: {
     activeLink(newRoute){
       this.route = newRoute;
     }
+  },
+  created() {
+    const vm = this;
+    const api = `${process.env.VUE_APP_APIPATH}/api/user/check`;
+    this.$http.post(api).then((response) => {
+      if(response.data.success){
+        vm.isLogin = true
+      }
+    })  
   },
 }
 </script>
@@ -85,7 +110,7 @@ export default {
   top: 0;
   right: 0;
 }
-.nav-link.active{
+.nav-link.active, .nav-link:active{
   background-color: #FFE180;
 }
 

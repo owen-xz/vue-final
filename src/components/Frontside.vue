@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import Navbar from './Navbar';
-import Footer from './Footer';
-import Alert from './AlertMessage'
+import Navbar from './Navbar.vue';
+import Footer from './Footer.vue';
+import Alert from './AlertMessage.vue'
 export default {
   components:{
     Navbar,
@@ -36,7 +36,7 @@ export default {
   created() {
     //取得購物車數
     const vm = this;
-    const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
+    const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
     this.$http.get(api).then((response) => {
       vm.cartNum = response.data.data.carts.length;
     });
