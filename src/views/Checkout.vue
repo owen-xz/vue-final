@@ -3,7 +3,7 @@
     <loading :active.sync="isLoading"></loading>
     <div class="container-fluid">
       <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10 col-lg-8">
           <!--PC版-->
           <table class="table my-4 d-none d-md-table">
             <tbody>
@@ -96,7 +96,7 @@
             </div>
           </div>
 
-          <div class="form-group mb-4">
+          <div class="form-group mb-5">
             <label for="discount-code">✦ 輸入折扣碼「ilovesushi」，和我們一同歡慶開幕吧！</label>
             <div class="input-group input-group-sm">
               <input type="text" name="" id="discount-code" class="form-control" placeholder="請輸入優惠碼" v-model="coupon_code">
@@ -108,51 +108,45 @@
             </div>
           </div>
 
-          
-                
-
           <h2 class="text-center">收件人資訊</h2>
           <ValidationObserver class="mb-4" @submit.prevent="createOrder" v-slot="{ invalid }" tag="form">
-            <div class="form-group">
-              <label for="useremail">Email*</label>
-              <ValidationProvider rules="required|email" v-slot="{ failed, errors }" name="Email">
-                <input type="email" class="form-control" :class="{ 'is-invalid': failed }" name="email" id="useremail"
-                  v-model="form.user.email" placeholder="請輸入 Email" required>
-                <span class="text-danger">{{ errors[0] }}</span>
-              </ValidationProvider>
-            </div>
-          
-            <div class="form-group">
-              <label for="username">收件人姓名*</label>
-              <ValidationProvider rules="required" v-slot="{ failed, errors }" name="收件人姓名">
-                <input type="text" class="form-control" :class="{ 'is-invalid': failed }" name="name" id="username"
-                v-model="form.user.name" placeholder="輸入姓名">
-                <span class="text-danger">{{ errors[0] }}</span>
-              </ValidationProvider>
-            </div>
-          
-            <div class="form-group">
-              <label for="usertel">收件人電話</label>
-              <input type="tel" class="form-control" id="usertel" v-model="form.user.tel" placeholder="請輸入電話">
-            </div>
-          
-            <div class="form-group">
-              <label for="useraddress">收件人地址*</label>
-              <ValidationProvider rules="required" v-slot="{ failed, errors }" name="收件人地址">
-                <input type="text" class="form-control" :class="{ 'is-invalid': failed }" name="address" id="useraddress" v-model="form.user.address"
-                  placeholder="請輸入地址">
-                <span class="text-danger" v-if="failed">地址欄位不得留空</span>
-              </ValidationProvider>
-            </div>
-          
-            <div class="form-group">
-              <label for="comment">留言</label>
-                <textarea name="" id="comment" class="form-control"  cols="30" rows="10" v-model="form.message"></textarea>
-            </div>
-
-            <div class="text-center">
-              <button class="btn btn-online px-4 py-2" :disabled="invalid">送出訂單</button>
-            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="username">收件人姓名*</label>
+                <ValidationProvider rules="required" v-slot="{ failed, errors }" name="收件人姓名">
+                  <input type="text" class="form-control" :class="{ 'is-invalid': failed }" name="name" id="username"
+                  v-model="form.user.name" placeholder="輸入姓名">
+                  <span class="text-danger">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
+              <div class="form-group col-md-8">
+                <label for="useremail">Email*</label>
+                <ValidationProvider rules="required|email" v-slot="{ failed, errors }" name="Email">
+                  <input type="email" class="form-control" :class="{ 'is-invalid': failed }" name="email" id="useremail"
+                    v-model="form.user.email" placeholder="請輸入 Email" required>
+                  <span class="text-danger">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div> 
+              <div class="form-group col-md-4">
+                <label for="usertel">收件人電話</label>
+                <input type="tel" class="form-control" id="usertel" v-model="form.user.tel" placeholder="請輸入電話">
+              </div>         
+              <div class="form-group col-md-8">
+                <label for="useraddress">收件人地址*</label>
+                <ValidationProvider rules="required" v-slot="{ failed, errors }" name="收件人地址">
+                  <input type="text" class="form-control" :class="{ 'is-invalid': failed }" name="address" id="useraddress" v-model="form.user.address"
+                    placeholder="請輸入地址">
+                  <span class="text-danger" v-if="failed">地址欄位不得留空</span>
+                </ValidationProvider>
+              </div>
+              <div class="form-group col-12">
+                <label for="comment">留言</label>
+                  <textarea name="" id="comment" class="form-control"  cols="30" rows="10" v-model="form.message"></textarea>
+              </div>
+              <div class="text-center col-12">
+                <button class="btn btn-online px-4 py-2" :disabled="invalid">送出訂單</button>
+              </div>
+            </div>  
           </ValidationObserver>
         </div>
       </div>
