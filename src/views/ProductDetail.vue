@@ -23,7 +23,6 @@
           <div class="d-flex">
             <button type="button" class="btn btn-outline-content btn-block" @click="goBack">返回</button>
             <button type="button" class="btn btn-primary btn-block mt-0 ml-2" @click="addtoCart(product.id)">
-              <i class="fas fa-spinner fa-spin" v-if="isLoading"></i>
               <i class="fas fa-shopping-cart"></i>
               加到購物車
             </button>
