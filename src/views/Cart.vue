@@ -31,7 +31,6 @@
                   </td>
                   <td class="align-middle d-none d-md-table-cell">
                     <a href="#" @click="getProduct(item.product.id)">{{ item.product.title }}</a>
-                    <small class="text-success d-block" v-if="item.coupon">已套用優惠卷</small>
                   </td>
                   <td class="align-middle d-none d-md-table-cell">
                     <div class="d-flex align-items-center">
@@ -50,7 +49,6 @@
                         <tr>
                           <td class="p-1 align-middle h5">
                             <a href="#" @click.prevent="getProduct(item.product.id)">{{ item.product.title }}</a>
-                            <small class="text-success d-block" v-if="item.coupon">已套用優惠卷</small>
                           </td>
                           <td width="100" class="p-1">
                             <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="getProduct(item.product.id)" style="cursor: pointer">
@@ -80,26 +78,12 @@
                   <td colspan="4" class="text-right">總計</td>
                   <td class="text-right" width="100">{{ cart.total | currency }}</td>
                 </tr>
-                <tr v-if="cart.total !== cart.final_total">
-                  <td colspan="4" class="text-right text-success">折扣價</td>
-                  <td class="text-right text-success" width="100">{{ cart.final_total | currency }}</td>
-                </tr>
               </tfoot>
             </table>
-            <div class="form-group mb-4">
-              <label for="discount-code">✦ 輸入折扣碼「ilovesushi」，和我們一同歡慶開幕吧！</label>
-              <div class="input-group input-group-sm">
-                <input type="text" name="" id="discount-code" class="form-control" placeholder="請輸入優惠碼" v-model="coupon_code">
-                <div class="input-group-append">
-                  <button class="btn btn-title" type="button" @click="addCouponCode">
-                    套用優惠碼
-                  </button>
-                </div>
-              </div>
-            </div>
+            
             <div class="text-center mb-4">
               <router-link class="btn btn-title px-4 py-2 mr-2" to="/products">繼續逛逛</router-link>
-              <router-link class="btn btn-online px-4 py-2" to="/checkout">前往結帳</router-link>
+              <a href="#" class="btn btn-online px-4 py-2" @click.prevent="checkout" >前往結帳</a>
             </div>
           </div>
         </div>
@@ -143,57 +127,52 @@ export default {
         vm.isLoading = false;
       });
     },
-    addCouponCode(){
+    removeOldCartQty(id){
       const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/coupon`;
-      const coupon = {
-        code: vm.coupon_code
-      }
-      vm.isLoading = true;
-      this.$http.post(api, {data: coupon}).then((response) => {
-        if(response.data.success){
-          vm.$bus.$emit('message:push', response.data.message, 'success' )
-        } else {
-          vm.$bus.$emit('message:push', response.data.message, 'danger' )
-        }
-        vm.getCart();
-        vm.isLoading = false;
-      });
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`;
+      this.$http.delete(api);
     },
+    addtoCart(id, qty){
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+      const cart = {
+        product_id: id,
+        qty
+      }
+      this.$http.post(api, {data: cart});
+    }, 
     changeQty(id, operator){
       let carts = this.cart.carts;
       let index = carts.findIndex(item => {
         return item.id === id; 
       });
       let cart = carts[index];
-      let priceChange;
+      let priceChange = parseInt(cart.product.price);
       if(operator === '-'){
         cart.qty --;
         if(cart.qty === 0){
           this.removeCartItem(id);
         } else {
-          cart.total -= parseInt(cart.product.price);
-          this.cart.total -= parseInt(cart.product.price);
-          if(cart.coupon) {
-            priceChange = parseInt(cart.product.price) * parseInt(cart.coupon.percent) / 100 
-          } else {
-            priceChange = parseInt(cart.product.price)
-          }
-          cart.final_total -= priceChange;
-          this.cart.final_total -= priceChange; 
+          cart.total -= priceChange;
+          this.cart.total -= priceChange;
         }
       } else if (operator === '+') {
         cart.qty ++;
-          cart.total += parseInt(cart.product.price);
-          this.cart.total += parseInt(cart.product.price);
-          if(cart.coupon) {
-            priceChange = parseInt(cart.product.price) * parseInt(cart.coupon.percent) / 100 
-          } else {
-            priceChange = parseInt(cart.product.price)
-          }
-          cart.final_total += priceChange;
-          this.cart.final_total += priceChange;  
+          cart.total += priceChange;
+          this.cart.total += priceChange;
       }
+    },
+    checkout(){
+      const vm = this;
+      vm.isLoading = true;
+      vm.cart.carts.forEach(item => {
+        this.addtoCart(item.product_id, item.qty); 
+        this.removeOldCartQty(item.id)
+      })
+      vm.timeout = setTimeout(() => {
+        vm.isLoading = false;
+        vm.$router.push('/checkout')
+      }, 1000);
     }
   },
   created() {

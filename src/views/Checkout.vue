@@ -96,6 +96,18 @@
             </div>
           </div>
 
+          <div class="form-group mb-4">
+            <label for="discount-code">✦ 輸入折扣碼「ilovesushi」，和我們一同歡慶開幕吧！</label>
+            <div class="input-group input-group-sm">
+              <input type="text" name="" id="discount-code" class="form-control" placeholder="請輸入優惠碼" v-model="coupon_code">
+              <div class="input-group-append">
+                <button class="btn btn-title" type="button" @click="addCouponCode">
+                  套用優惠碼
+                </button>
+              </div>
+            </div>
+          </div>
+
           
                 
 
@@ -154,6 +166,7 @@ export default {
     return {
       cart: {},
       isLoading: false,
+      coupon_code: '',
       form: {
         user: {
           name: '',
@@ -178,6 +191,23 @@ export default {
       this.$http.get(api).then((response) => {
         vm.cart = response.data.data;
         vm.$emit('getCartNum', vm.cart.carts.length);
+        vm.isLoading = false;
+      });
+    },
+    addCouponCode(){
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/coupon`;
+      const coupon = {
+        code: vm.coupon_code
+      }
+      vm.isLoading = true;
+      this.$http.post(api, {data: coupon}).then((response) => {
+        if(response.data.success){
+          vm.$bus.$emit('message:push', response.data.message, 'success' )
+        } else {
+          vm.$bus.$emit('message:push', response.data.message, 'danger' )
+        }
+        vm.getCart();
         vm.isLoading = false;
       });
     },
