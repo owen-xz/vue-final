@@ -152,8 +152,11 @@ export default {
         prevEl: '.swiper-button-prev',
       },
       observer:true,//修改swiper自己或子元素時，自動初始化swiper
-      //observeParents:true,//修改swiper的父元素時，自動初始化swiper
+      observeParents:true,//修改swiper的父元素時，自動初始化swiper
     })
+    this.timeout = setTimeout(() => {
+      mySwiper.slideTo(0, 0, false)
+    }, 500)
   },
   created() {
     //取得目標商品的資料
