@@ -7,12 +7,12 @@
     <div class="container-fluid mt-4">
       <div class="row">
         <div class="col-md-3 mb-4">
-          <Sidebar class="sticky-top" style="top: 67px" @changeCategory="setCategory"></Sidebar>
+          <Sidebar class="sticky-top" style="top: 67px"></Sidebar>
         </div>
         <div class="col-md-9">
           
           <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4" v-for="(item, index) in products" :key="item.id">
+            <div class="col-lg-4 col-md-6 mb-4" v-for="(item, index) in filterProducts" :key="item.id">
               <div class="card border-0 shadow-sm h-100 card-hover">
                 <div @click="goProductDetail(item.id)" style="cursor: pointer;">
                   <div class="bg-cover text-right" style="height: 200px;" :style="{backgroundImage: `url(${item.imageUrl})`}"></div>
@@ -45,40 +45,27 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Sidebar from '../components/ProductsSidebar';
 export default {
   components: {
     Sidebar
   },
   data(){
-    return {
-      category: '所有商品'
+    return {     
     }
   },
   computed: {
-    favorite(){
-      return this.$store.state.favorite;
-    },
-    products(){
+    filterProducts(){
       if(this.category === '所有商品') {
-        return this.$store.state.products;
+        return this.products;
       } else {
-        return this.$store.state.products.filter(item => item.category === this.category);
+        return this.products.filter(item => item.category === this.category);
       }     
     },
-    favorite(){
-      return this.$store.state.favorite;
-    }
-    
+    ...mapGetters(['products', 'favorite', 'category'])
   },
   methods: {
-    setCategory(){
-      if(this.$route.query.category){
-        this.category = this.$route.query.category; 
-      } else {
-        this.category = '所有商品';
-      }
-    },
     goProductDetail(id){
       const router = this.$router;
       this.$store.dispatch('goProductDetail', {id, router});
@@ -94,7 +81,6 @@ export default {
   },
   created() {
     this.$store.dispatch('setRouteName', this.$route.name);
-    this.setCategory();
   }
 }
 </script>

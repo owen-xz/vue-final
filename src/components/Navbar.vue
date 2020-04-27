@@ -141,6 +141,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import $ from 'jquery';
 export default {
   data(){
@@ -150,31 +151,17 @@ export default {
     }
   },
   computed: {
-    cart(){
-      return this.$store.state.cart;
-    },
     cartNum(){
-      if(this.$store.state.cart.carts){
-        return this.$store.state.cart.carts.length;
+      if(this.cart.carts){
+        return this.cart.carts.length;
       }   
     },
     favoriteNum(){
-      if(this.$store.state.favorite){
-        return this.$store.state.favorite.length;
+      if(this.favorite){
+        return this.favorite.length;
       }
     },
-    activeLink(){
-      return this.$store.state.routeName;
-    },
-    isLogin(){
-      return this.$store.state.isLogin;
-    },
-    adIsShow(){
-      return this.$store.state.adIsShow;
-    },
-    favorite(){
-      return this.$store.state.favorite;
-    }
+    ...mapGetters(['cart', 'activeLink', 'isLogin', 'adIsShow', 'favorite'])
   },
   methods: {
     goProductDetail(id){
@@ -184,7 +171,28 @@ export default {
       $('#favoriteModal').modal('hide');
     },
     signout(){
-      this.$store.dispatch('signout', this.$router);
+      const vm = this
+      const api = `${process.env.VUE_APP_APIPATH}/logout`;
+      vm.$http.post(api).then((response) => {
+        if(response.data.success){
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
+          vm.$store.dispatch('setIsLogin', false);
+          if(vm.$route.name !== 'Home'){
+            vm.$router.push('/');
+          } 
+        }
+      })
+    },
+    checkLogin() {
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/user/check`;
+      vm.$http.post(api).then((response) => {
+        if(response.data.success){
+          vm.$store.dispatch('setIsLogin', true);
+        } else {
+          vm.$store.dispatch('setIsLogin', false);
+        }
+      })
     },
     closeAd(){
       this.$store.dispatch('closeAd');
@@ -199,7 +207,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('checkLogin');
+    this.checkLogin();
   },
 
 }

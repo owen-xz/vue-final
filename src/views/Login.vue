@@ -34,9 +34,17 @@ export default {
   },
   methods: {
     signin(){
-      const user = this.user;
-      const router = this.$router;
-      this.$store.dispatch('signin', {user, router});
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/admin/signin`;
+      vm.$http.post(api, vm.user).then((response) => {
+        if(response.data.success){
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
+          vm.$store.dispatch('setIsLogin', true);
+          vm.$router.push('/admin/products');
+        }else{
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
+        }
+      })
     }
   }
 }

@@ -21,11 +21,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   computed: {
-    pagination(){
-      return this.$store.state.pagination;
-    }
+    ...mapGetters(['pagination'])
   },
   methods: {
     getPage(page){

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar :activeLink="route"></Navbar>
+    <Navbar></Navbar>
     <Alert></Alert>
     <main>
       <router-view></router-view>
@@ -21,19 +21,10 @@ export default {
   },
   data () {
     return {
-      route: ''
     }
   },
   methods: {
-    setNavbarActive(route){
-      this.route = route;
-    },
-  },
-  created() {
-  },
-  mounted() {
-    
-  },
+  }
 }
 </script>
 

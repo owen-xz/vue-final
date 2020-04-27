@@ -1,10 +1,10 @@
 <template>
   <div>
     <Alert></Alert>
-    <Navbar :activeLink="route"></Navbar>
+    <Navbar></Navbar>
     <div class="row no-gutters">
-      <Sidebar :activeLink="route" class="col-lg-2"></Sidebar>
-      <router-view @sendRoute="setRoute" class="px-4 col-lg-10"></router-view>
+      <Sidebar class="col-lg-2"></Sidebar>
+      <router-view class="px-4 col-lg-10"></router-view>
     </div>    
   </div>
 </template>
@@ -21,13 +21,9 @@ export default {
   },
   data () {
     return {
-      route: ''
     }
   },
   methods: {
-    setRoute(route){
-      this.route = route;
-    },
     signout(){
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/logout`;

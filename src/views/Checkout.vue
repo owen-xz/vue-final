@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
@@ -173,9 +174,7 @@ export default {
     }
   },
   computed: {
-    cart() {
-      return this.$store.state.cart;
-    }
+    ...mapGetters(['cart'])
   },
   methods: {
     goProductDetail(id){
@@ -183,7 +182,21 @@ export default {
       this.$store.dispatch('goProductDetail', {id, router});
     },
     addCouponCode(){
-      this.$store.dispatch('addCouponCode', this.coupon_code);
+      const vm = this;
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/coupon`;
+      const coupon = {
+        code: vm.coupon_code
+      }
+      vm.$store.dispatch('updateLoading', true);
+      vm.$http.post(api, {data: coupon}).then((response) => {
+        if(response.data.success){
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
+        } else {
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
+        }
+        vm.$store.dispatch('getCart');
+        vm.$store.dispatch('updateLoading', false);
+      });
     },
     createOrder(){
       const vm = this;

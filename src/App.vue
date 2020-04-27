@@ -8,18 +8,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: 'App',
   computed: {
-    isLoading() {
-      return this.$store.state.isLoading;
-    },
-    adIsShow(){
-      return this.$store.state.adIsShow;
-    }
-  },
-  methods: {
-    
+    ...mapGetters(['isLoading', 'adIsShow'])
   },
   created() {
     this.$store.dispatch('getProducts');

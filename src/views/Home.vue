@@ -20,12 +20,12 @@
               </router-link>
             </div>
             <div class="col-4 d-flex justify-content-center align-items-center p-2">
-              <router-link :to="{path: '/products', query: {category: '壽司'}}" @click.native="changeNavbarActive" class="btn btn-lg text-white text-center btn-block py-md-6 py-5 bg-cover menu-sushi border-0 shadow">
+              <router-link :to="{path: '/products', query: {category: '壽司'}}" class="btn btn-lg text-white text-center btn-block py-md-6 py-5 bg-cover menu-sushi border-0 shadow">
                 <b>壽司</b>
               </router-link>
             </div>
             <div class="col-4 d-flex justify-content-center align-items-center p-2">
-              <router-link :to="{path: '/products', query: {category: '丼飯'}}" @click.native="changeNavbarActive" class="btn btn-lg text-white text-center btn-block py-md-6 py-5 bg-cover menu-ton border-0 shadow">
+              <router-link :to="{path: '/products', query: {category: '丼飯'}}" class="btn btn-lg text-white text-center btn-block py-md-6 py-5 bg-cover menu-ton border-0 shadow">
                 <b>丼飯</b>
               </router-link>
             </div>
@@ -206,6 +206,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Swiper from 'swiper/js/swiper.min.js';
 import 'swiper/css/swiper.min.css';
 
@@ -223,9 +224,7 @@ export default {
     }
   }, 
   computed: {
-    products() {
-      return this.$store.state.products;
-    }
+    ...mapGetters(['products'])
   },
   methods: {
     goProductDetail(id){

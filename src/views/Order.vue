@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Pagination from '../components/Pagination.vue';
 export default {
   components: {
@@ -97,12 +98,7 @@ export default {
     }
   },
   computed: {
-    orders(){
-      return this.$store.state.orders;
-    },
-    pagination(){
-      return this.$store.state.pagination;
-    }
+    ...mapGetters(['orders', 'pagination'])
   },
   methods: {
     getOrders(page = 1){

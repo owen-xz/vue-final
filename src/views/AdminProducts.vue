@@ -191,6 +191,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import $ from 'jquery';
 import Pagination from '../components/Pagination.vue';
 
@@ -209,9 +210,7 @@ export default {
     }
   },
   computed: {
-    pagination(){
-      return this.$store.state.pagination;
-    }
+    ...mapGetters(['pagination'])
   },
   methods: {
     getProducts(page = 1){

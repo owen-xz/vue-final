@@ -6,18 +6,21 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   strict: true,
   state: {
-    isLoading: false,
     products: [],
     product: {},
     cart: {},
     order: {},
     orders: [],
     pagination: {},
-    isLogin: false,
     routeName: '',
+    category: '所有商品',
     messages: [],
-    adIsShow: true,
-    favorite: []
+    favorite: [],
+    status: {
+      isLoading: false,
+      isLogin: false,
+      adIsShow: true,
+    }
   },
   actions: {
     updateLoading(context, status) {
@@ -76,22 +79,6 @@ export default new Vuex.Store({
         context.dispatch('getCart');
       });
     },
-    addCouponCode(context, couponCode){
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/coupon`;
-      const coupon = {
-        code: couponCode
-      }
-      context.commit('LOADING', true);
-      axios.post(api, {data: coupon}).then((response) => {
-        if(response.data.success){
-          context.dispatch('updateMessage', { message: response.data.message, status: 'success' });
-        } else {
-          context.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
-        }
-        context.dispatch('getCart');
-        context.commit('LOADING', false);
-      });
-    },
     getPagination(context, payload){
       context.commit('PAGINATION', payload);
     },
@@ -112,53 +99,16 @@ export default new Vuex.Store({
         context.commit('LOADING', false);
       });
     },
-    payOrder(context, id){
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/pay/${id}`;
-      context.commit('LOADING', true);
-      axios.post(api).then((response) => {
-        if(response.data.success){
-          context.dispatch('updateMessage', { message: response.data.message, status: 'success' });
-          context.dispatch('getOrder', id);
-        }
-        context.commit('LOADING', false);
-      });
-    },
-    checkLogin(context) {
-      const api = `${process.env.VUE_APP_APIPATH}/api/user/check`;
-      axios.post(api).then((response) => {
-        if(response.data.success){
-          context.commit('ISLOGIN', true);
-        } else {
-          context.commit('ISLOGIN', false);
-        }
-      })
-    },
-    signin(context, {user, router}){
-      const api = `${process.env.VUE_APP_APIPATH}/admin/signin`;
-      axios.post(api, user).then((response) => {
-        if(response.data.success){
-          context.dispatch('updateMessage', { message: response.data.message, status: 'success' });
-          context.commit('ISLOGIN', true);
-          router.push('/admin/products');
-        }else{
-          context.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
-        }
-      })
-    },
-    signout(context, router){
-      const api = `${process.env.VUE_APP_APIPATH}/logout`;
-      axios.post(api).then((response) => {
-        if(response.data.success){
-          context.dispatch('updateMessage', { message: response.data.message, status: 'success' });
-          context.commit('ISLOGIN', false);
-          if(router.currentRoute.name !== 'Home'){
-            router.push('/');
-          } 
-        }
-      })
+    setIsLogin(context, payload){
+      context.commit('ISLOGIN', payload);
     },
     setRouteName(context, name) {
       context.commit('ROUTENAME', name);
+    },
+    changeCategory(context, category){
+      window.document.body.scrollTop= 0;
+      window.document.documentElement.scrollTop = 0;
+      context.commit('CATEGORY', category);
     },
     updateMessage (context, payload) {
       const timestamp = Math.floor(new Date() / 1000);
@@ -174,9 +124,6 @@ export default new Vuex.Store({
     closeAd(context){
       context.commit('ADISSHOW', false);
     },
-    setIsLike(context){
-      context.commit('SETISLIKE');
-    },
     setFavorite(context, {item, favoriteIndex, productIndex}){
       if(favoriteIndex === -1){
         const method = 'add';
@@ -190,11 +137,10 @@ export default new Vuex.Store({
       const favoriteId = context.state.favorite.map(item => item.id);
       localStorage.setItem('favorite', JSON.stringify(favoriteId));
     }
-
   },
   mutations: {
     LOADING(state, payload) {
-      state.isLoading = payload;
+      state.status.isLoading = payload;
     },
     PRODUCTS(state, payload) {
       state.products = payload;
@@ -212,6 +158,7 @@ export default new Vuex.Store({
           })
         })
       }
+      console.log(state.products);
     },
     PRODUCT(state, payload) {
       state.product = payload;
@@ -229,10 +176,13 @@ export default new Vuex.Store({
       state.pagination = payload;
     },
     ISLOGIN(state, payload) {
-      state.isLogin = payload;
+      state.status.isLogin = payload;
     },
     ROUTENAME(state, payload) {
       state.routeName = payload;
+    },
+    CATEGORY(state, payload){
+      state.category = payload;
     },
     ALERTMESSAGE (state, payload) {
       state.messages.push(payload)
@@ -248,12 +198,7 @@ export default new Vuex.Store({
       })
     },
     ADISSHOW(state, payload) {
-      state.adIsShow = payload;
-    },
-    SETISLIKE(state) {
-      state.products.forEach(item => {
-        Vue.set(item, 'isLike', false)      
-      })
+      state.status.adIsShow = payload;
     },
     FAVORITE(state, payload) {
       if(payload.method === 'add'){
@@ -264,5 +209,46 @@ export default new Vuex.Store({
         state.products[payload.productIndex].isLike = false;
       } 
     },
+  },
+  getters: {
+    products(state){
+      return state.products;
+    },
+    product(state){
+      return state.product;
+    },
+    favorite(state){
+      return state.favorite;
+    },
+    cart(state){
+      return state.cart;
+    },
+    order(state){
+      return state.order
+    },
+    orders(state){
+      return state.orders;
+    },
+    pagination(state){
+      return state.pagination;
+    },
+    activeLink(state){
+      return state.routeName;
+    },
+    category(state){
+      return state.category;
+    },
+    isLoading(state){
+      return state.status.isLoading;
+    },
+    isLogin(state){
+      return state.status.isLogin;
+    },
+    adIsShow(state){
+      return state.status.adIsShow;
+    },
+    messages(state){
+      return state.messages;
+    }
   }
 })

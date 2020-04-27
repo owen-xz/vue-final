@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: 'Navbar',
   data() {
@@ -19,9 +20,7 @@ export default {
     };
   },
   computed: {
-    messages () {
-      return this.$store.state.messages
-    }
+    ...mapGetters(['messages'])
   },
   methods: {
     updateMessage(message, status) {

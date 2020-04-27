@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
@@ -99,9 +100,7 @@ export default {
     }
   },
   computed: {
-    order() {
-      return this.$store.state.order;
-    }
+    ...mapGetters(['order'])
   },
   methods: {
     goProductDetail(id){

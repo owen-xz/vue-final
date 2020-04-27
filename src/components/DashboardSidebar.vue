@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import $ from 'jquery';
 export default {
   data () {
@@ -64,12 +65,7 @@ export default {
     }
   },
   computed: {
-    activeLink(){
-      return this.$store.state.routeName;
-    }
-  },
-  created() {
-    this.route = this.$route.name; 
+    ...mapGetters(['activeLink'])
   },
 }
 </script>

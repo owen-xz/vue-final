@@ -49,8 +49,8 @@
           <h3 class=" text-center mb-4"><b>現正特價</b></h3>
           <div class="swiper-container mb-4">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="item in products">
-                <div class="swiper-card">
+              <div class="swiper-slide" v-for="item in filterProducts">
+                <div class="swiper-card" v-if="swiperIsReady">
                   <div class="card h-100 card-hover shadow-sm">
                     <div @click="goProductDetail(item.id)" style="cursor: pointer;">
                       <div class="bg-cover card-img" 
@@ -83,26 +83,24 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Swiper from 'swiper/js/swiper.min.js';
 import 'swiper/css/swiper.min.css';
 export default {
   data () {
     return {
-      cart: {},
       qty: 1,
       swiperIsReady: false
     }
   },
   computed: {
-    product(){
-      return this.$store.state.product;
-    },
-    products(){
-      return (this.$store.state.products.filter(item => {
+    filterProducts(){
+      return (this.products.filter(item => {
         if(item.origin_price !== item.price && item.id !== this.product.id)
           return true;
       }))
-    }
+    },
+    ...mapGetters(['products', 'product'])
   },
   methods: {
     goBack(){
@@ -153,7 +151,6 @@ export default {
   created() {
     const id = this.$route.params.id
     this.$store.dispatch('getProduct', id);
-    this.swiperInit();
     this.timeout = setTimeout(() => {
       this.swiperInit();
     }, 1000)
