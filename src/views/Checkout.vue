@@ -1,9 +1,9 @@
 <template>
   <div>
-    <loading :active.sync="isLoading"></loading>
-    <div class="container-fluid">
-      <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8">
+    <div class="container pt-4">
+      <div class="row justify-content-lg-between justify-content-center">
+        <div class="col-lg-6">
+          <h3 class="text-center"><b>購物車細節</b></h3>
           <!--PC版-->
           <table class="table my-4 d-none d-md-table">
             <tbody>
@@ -15,10 +15,10 @@
               </tr>
               <tr class="" v-for="item in cart.carts" :key="item.id">
                 <td class="d-none d-md-table-cell align-middle" width="120" height="120">
-                  <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="getProduct(item.product.id)" style="cursor: pointer">
+                  <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="goProductDetail(item.product.id)" style="cursor: pointer">
                 </td>
                 <td class="align-middle d-none d-md-table-cell">
-                  <a href="#" @click.prevent="getProduct(item.product.id)">
+                  <a href="#" @click.prevent="goProductDetail(item.product.id)">
                     {{ item.product.title }}  
                   </a>
                   <small class="text-success d-block" v-if="item.coupon">已套用優惠卷</small>
@@ -58,7 +58,7 @@
                         <tbody>
                           <tr>
                             <td class="p-1 align-middle h5">
-                              <a href="#" @click.prevent="getProduct(item.product.id)">
+                              <a href="#" @click.prevent="goProductDetail(item.product.id)">
                                 {{ item.product.title }}
                                 <div class="text-success" v-if="item.coupon">
                                   <small>已套用優惠卷</small>
@@ -66,7 +66,7 @@
                               </a>
                             </td>
                             <td width="100" class="p-1">
-                              <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="getProduct(item.product.id)" style="cursor: pointer">
+                              <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="goProductDetail(item.product.id)" style="cursor: pointer">
                             </td>
                           </tr>
                           <tr>
@@ -97,7 +97,7 @@
           </div>
 
           <div class="form-group mb-5">
-            <label for="discount-code">✦ 輸入折扣碼「ilovesushi」，和我們一同歡慶開幕吧！</label>
+            <label for="discount-code">✦ 點擊畫面上方領取折扣碼，和我們一同歡慶開幕吧！</label>
             <div class="input-group input-group-sm">
               <input type="text" name="" id="discount-code" class="form-control" placeholder="請輸入優惠碼" v-model="coupon_code">
               <div class="input-group-append">
@@ -107,46 +107,48 @@
               </div>
             </div>
           </div>
-
-          <h2 class="text-center">收件人資訊</h2>
+     
+          
+        </div>
+        <div class="col-lg-5 col-md-8">
+          <h3 class="text-center"><b>收件人資訊</b></h3>
           <ValidationObserver class="mb-4" @submit.prevent="createOrder" v-slot="{ invalid }" tag="form">
-            <div class="form-row">
-              <div class="form-group col-md-4">
-                <label for="username">收件人姓名*</label>
-                <ValidationProvider rules="required" v-slot="{ failed, errors }" name="收件人姓名">
-                  <input type="text" class="form-control" :class="{ 'is-invalid': failed }" name="name" id="username"
-                  v-model="form.user.name" placeholder="輸入姓名">
-                  <span class="text-danger">{{ errors[0] }}</span>
-                </ValidationProvider>
-              </div>
-              <div class="form-group col-md-8">
-                <label for="useremail">Email*</label>
-                <ValidationProvider rules="required|email" v-slot="{ failed, errors }" name="Email">
-                  <input type="email" class="form-control" :class="{ 'is-invalid': failed }" name="email" id="useremail"
-                    v-model="form.user.email" placeholder="請輸入 Email" required>
-                  <span class="text-danger">{{ errors[0] }}</span>
-                </ValidationProvider>
-              </div> 
-              <div class="form-group col-md-4">
-                <label for="usertel">收件人電話</label>
-                <input type="tel" class="form-control" id="usertel" v-model="form.user.tel" placeholder="請輸入電話">
-              </div>         
-              <div class="form-group col-md-8">
-                <label for="useraddress">收件人地址*</label>
-                <ValidationProvider rules="required" v-slot="{ failed, errors }" name="收件人地址">
-                  <input type="text" class="form-control" :class="{ 'is-invalid': failed }" name="address" id="useraddress" v-model="form.user.address"
-                    placeholder="請輸入地址">
-                  <span class="text-danger" v-if="failed">地址欄位不得留空</span>
-                </ValidationProvider>
-              </div>
-              <div class="form-group col-12">
-                <label for="comment">留言</label>
-                  <textarea name="" id="comment" class="form-control"  cols="30" rows="10" v-model="form.message"></textarea>
-              </div>
-              <div class="text-center col-12">
-                <button class="btn btn-online px-4 py-2" :disabled="invalid">送出訂單</button>
-              </div>
-            </div>  
+            <div class="form-group">
+              <label for="username">收件人姓名*</label>
+              <ValidationProvider rules="required" v-slot="{ failed, errors }" name="收件人姓名">
+                <input type="text" class="form-control" :class="{ 'is-invalid': failed }" name="name" id="username"
+                v-model="form.user.name" placeholder="輸入姓名">
+                <span class="text-danger">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
+            <div class="form-group">
+              <label for="usertel">收件人電話</label>
+              <input type="tel" class="form-control" id="usertel" v-model="form.user.tel" placeholder="請輸入電話">
+            </div>
+            <div class="form-group">
+              <label for="useremail">Email*</label>
+              <ValidationProvider rules="required|email" v-slot="{ failed, errors }" name="Email">
+                <input type="email" class="form-control" :class="{ 'is-invalid': failed }" name="email" id="useremail"
+                  v-model="form.user.email" placeholder="請輸入 Email" required>
+                <span class="text-danger">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>         
+            <div class="form-group">
+              <label for="useraddress">收件人地址*</label>
+              <ValidationProvider rules="required" v-slot="{ failed, errors }" name="收件人地址">
+                <input type="text" class="form-control" :class="{ 'is-invalid': failed }" name="address" id="useraddress" v-model="form.user.address"
+                  placeholder="請輸入地址">
+                <span class="text-danger" v-if="failed">地址欄位不得留空</span>
+              </ValidationProvider>
+            </div>
+            <div class="form-group">
+              <label for="comment">留言</label>
+                <textarea name="" id="comment" class="form-control"  cols="30" rows="10" v-model="form.message"></textarea>
+            </div>
+            <div class="text-center">
+              <button class="btn btn-online px-4 py-2" :disabled="invalid">送出訂單</button>
+            </div>
+             
           </ValidationObserver>
         </div>
       </div>
@@ -158,8 +160,6 @@
 export default {
   data () {
     return {
-      cart: {},
-      isLoading: false,
       coupon_code: '',
       form: {
         user: {
@@ -172,54 +172,32 @@ export default {
       }
     }
   },
+  computed: {
+    cart() {
+      return this.$store.state.cart;
+    }
+  },
   methods: {
-    getProduct(id){
-      this.$router.push({
-        path: `/product/${id}`,
-      })
-    },
-    getCart(){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.cart = response.data.data;
-        vm.$emit('getCartNum', vm.cart.carts.length);
-        vm.isLoading = false;
-      });
+    goProductDetail(id){
+      const router = this.$router;
+      this.$store.dispatch('goProductDetail', {id, router});
     },
     addCouponCode(){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/coupon`;
-      const coupon = {
-        code: vm.coupon_code
-      }
-      vm.isLoading = true;
-      this.$http.post(api, {data: coupon}).then((response) => {
-        if(response.data.success){
-          vm.$bus.$emit('message:push', response.data.message, 'success' )
-        } else {
-          vm.$bus.$emit('message:push', response.data.message, 'danger' )
-        }
-        vm.getCart();
-        vm.isLoading = false;
-      });
+      this.$store.dispatch('addCouponCode', this.coupon_code);
     },
     createOrder(){
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/order`;
-      const order = vm.form;
-      vm.isLoading = true;
-      this.$http.post(api, {data: order}).then((response) => {
+      vm.$store.dispatch('updateLoading', true);
+      vm.$http.post(api, {data: vm.form}).then((response) => {
         if(response.data.success){
-          this.$router.push(`/checkout/${response.data.orderId}`);
+          vm.$router.push(`/checkout/${response.data.orderId}`);
         }
-        vm.isLoading = false;
+        vm.$store.dispatch('updateLoading', false);
       });
     },
   },
   created() {
-    this.getCart();
   },
 }
 </script>

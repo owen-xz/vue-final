@@ -1,6 +1,5 @@
 <template>
   <div>
-    <loading :active.sync="isLoading"></loading>
     <div class="text-right mt-4">
       <button class="btn btn-primary" @click="openModal(true)">建立優惠卷</button>
     </div>
@@ -163,20 +162,23 @@ export default {
     return {
       coupons: [],
       tempCoupon: {},
-      isLoading: false,
       isNew: false,
-      pagination: {}
+    }
+  },
+  computed: {
+    pagination(){
+      return this.$store.state.pagination;
     }
   },
   methods: {
     getCoupons(page = 1){
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupons?page=${page}`;
-      vm.isLoading = true;
+      vm.$store.dispatch('updateLoading', true);
       this.$http.get(api).then((response) => {
         vm.coupons = response.data.coupons;
-        vm.isLoading = false;
-        vm.pagination = response.data.pagination;
+        vm.$store.dispatch('updateLoading', false);
+        vm.$store.dispatch('getPagination', response.data.pagination);
       })
     },
     updateCoupon(){
@@ -189,18 +191,23 @@ export default {
       }
       this.$http[httpMethod](api, {data: vm.tempCoupon}).then((response) => {
         if(response.data.success){
-          $('#couponModal').modal('hide');
-          vm.getCoupons();
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
         }else{
-          $('#couponModal').modal('hide');
-          vm.getCoupons();
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
         }
+        $('#couponModal').modal('hide');
+        vm.getCoupons();
       })
     },
     deleteCoupon(item){
       const vm = this;
       let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupon/${item.id}`;
       this.$http.delete(api).then((response) => {
+        if(response.data.success){
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
+        }else{
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' }); 
+        }
         vm.getCoupons();
         $('#delCouponModal').modal('hide');
       });
@@ -221,7 +228,7 @@ export default {
     },
   },
   mounted() {
-    this.$emit('sendRoute', this.$route.name);
+    this.$store.dispatch('setRouteName', this.$route.name);
     this.getCoupons()
   },
 }

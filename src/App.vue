@@ -1,14 +1,29 @@
 <template>
   <div id="app">
-    <router-view/>
+    <loading :active.sync="isLoading"></loading>
+    <div :class="{'ad': adIsShow, 'noAd': !adIsShow}">
+      <router-view/>
+    </div> 
   </div>
 </template>
 
 <script>
 export default {
   name: 'App',
+  computed: {
+    isLoading() {
+      return this.$store.state.isLoading;
+    },
+    adIsShow(){
+      return this.$store.state.adIsShow;
+    }
+  },
   methods: {
     
+  },
+  created() {
+    this.$store.dispatch('getProducts');
+    this.$store.dispatch('getCart');
   },
 }
 </script>
@@ -19,7 +34,19 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $title;
-  margin-top: 63px;
+}
+
+.ad{
+  margin-top: 91.8px;
+  main{
+    min-height: calc(100vh - 147.8px);
+  }
+}
+.noAd{
+  margin-top: 53px;
+  main{
+    min-height: calc(100vh - 109px);
+  }
 }
 .bg-cover{
   background-size: cover;

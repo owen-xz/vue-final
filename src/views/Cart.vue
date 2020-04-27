@@ -1,6 +1,5 @@
 <template>
   <div>
-    <loading :active.sync="isLoading"></loading>
     <div class="container-fluid">
       <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8">
@@ -30,13 +29,13 @@
                     <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="getProduct(item.product.id)" style="cursor: pointer">
                   </td>
                   <td class="align-middle d-none d-md-table-cell">
-                    <a href="#" @click="getProduct(item.product.id)">{{ item.product.title }}</a>
+                    <a href="#" @click="goProductDetail(item.product.id)">{{ item.product.title }}</a>
                   </td>
                   <td class="align-middle d-none d-md-table-cell">
                     <div class="d-flex align-items-center">
-                      <a href="#" class="btn btn-sm btn-title p-0 mr-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item.id, '-')">-</a>
+                      <a href="#" class="btn btn-sm btn-title p-0 mr-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item, '-')">-</a>
                       {{ item.qty }}/{{ item.product.unit }}
-                      <a href="#" class="btn btn-sm btn-title p-0 ml-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item.id, '+')">+</a>
+                      <a href="#" class="btn btn-sm btn-title p-0 ml-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item, '+')">+</a>
                     </div>
                   </td>
                   <td class="align-middle text-right d-none d-md-table-cell">{{ item.total | currency }}</td>
@@ -48,7 +47,7 @@
                       <tbody>
                         <tr>
                           <td class="p-1 align-middle h5">
-                            <a href="#" @click.prevent="getProduct(item.product.id)">{{ item.product.title }}</a>
+                            <a href="#" @click.prevent="goProductDetail(item.product.id)">{{ item.product.title }}</a>
                           </td>
                           <td width="100" class="p-1">
                             <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="getProduct(item.product.id)" style="cursor: pointer">
@@ -58,9 +57,9 @@
                           <td class="p-1">數量</td>
                           <td class="p-1 align-middle text-right" width="120">
                             <div class="d-flex align-items-center justify-content-end">
-                              <a href="#" class="btn btn-sm btn-title p-0 mr-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item.id, '-')">-</a>
+                              <a href="#" class="btn btn-sm btn-title p-0 mr-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item, '-')">-</a>
                               {{ item.qty }}/{{ item.product.unit }}
-                              <a href="#" class="btn btn-sm btn-title p-0 ml-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item.id, '+')">+</a>
+                              <a href="#" class="btn btn-sm btn-title p-0 ml-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item, '+')">+</a>
                             </div>
                           </td>
                         </tr>
@@ -96,88 +95,63 @@
 export default {
   data () {
     return {
-      cart: {},
-      isLoading: false,
       coupon_code: '',
     }
   },
+  computed: {
+    cart() {
+      return this.$store.state.cart;
+    }
+  },
   methods: {
-    getProduct(id){
+    goProductDetail(id){
       this.$router.push({
         path: `/product/${id}`,
       })
     },
-    getCart(){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.cart = response.data.data;
-        vm.$emit('getCartNum', vm.cart.carts.length);
-        vm.isLoading = false;
-      });
-    },
     removeCartItem(id){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`;
-      vm.isLoading = true;
-      this.$http.delete(api).then((response) => {
-        vm.$bus.$emit('message:push', response.data.message, 'success' )
-        vm.getCart();
-        vm.isLoading = false;
-      });
+      this.$store.dispatch('removeCartItem', id);
     },
-    removeOldCartQty(id){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`;
-      this.$http.delete(api);
+    addtoCart(id, qty = 1){
+      this.$store.dispatch('addtoCart', {id, qty});
     },
-    addtoCart(id, qty){
+    changeQty(item, operator){
       const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      const cart = {
-        product_id: id,
-        qty
-      }
-      this.$http.post(api, {data: cart});
-    }, 
-    changeQty(id, operator){
-      let carts = this.cart.carts;
-      let index = carts.findIndex(item => {
-        return item.id === id; 
-      });
-      let cart = carts[index];
-      let priceChange = parseInt(cart.product.price);
+      let newQty = item.qty;
       if(operator === '-'){
-        cart.qty --;
-        if(cart.qty === 0){
-          this.removeCartItem(id);
-        } else {
-          cart.total -= priceChange;
-          this.cart.total -= priceChange;
+        newQty--;
+      } else if(operator === '+'){
+        newQty++;
+      }
+      if(newQty === 0){
+        vm.removeCartItem(item.id);
+      } else {
+        const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
+        const delApi = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${item.id}`;
+        const id = item.product_id;
+        const cart = {
+          product_id: id,
+          qty: newQty  
         }
-      } else if (operator === '+') {
-        cart.qty ++;
-          cart.total += priceChange;
-          this.cart.total += priceChange;
+        vm.$store.dispatch('updateLoading', true)
+        vm.$http.post(api, {data: cart}).then((response) => {
+          if(response.data.success){
+            vm.$http.delete(delApi).then((response) => {
+              if(response.data.success){
+                vm.$store.dispatch('getCart');
+                vm.$store.dispatch('updateLoading', false)
+              }
+            })
+          }          
+        });        
       }
     },
     checkout(){
-      const vm = this;
-      vm.isLoading = true;
-      vm.cart.carts.forEach(item => {
-        this.addtoCart(item.product_id, item.qty); 
-        this.removeOldCartQty(item.id)
-      })
-      vm.timeout = setTimeout(() => {
-        vm.isLoading = false;
-        vm.$router.push('/checkout')
-      }, 1000);
+      this.$router.push('/checkout')
     }
   },
   created() {
-    this.$emit('sendRoute', this.$route.name);
-    this.getCart(); 
+    this.$store.dispatch('setRouteName', this.$route.name); 
   },
 }
 </script>

@@ -34,16 +34,9 @@ export default {
   },
   methods: {
     signin(){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/admin/signin`;
-      this.$http.post(api, vm.user).then((response) => {
-        if(response.data.success){
-          vm.$bus.$emit('message:push', response.data.message, 'success' )
-          vm.$router.push('/admin/products');
-        }else{
-          vm.$bus.$emit('message:push', response.data.message, 'danger' )
-        }
-      })
+      const user = this.user;
+      const router = this.$router;
+      this.$store.dispatch('signin', {user, router});
     }
   }
 }

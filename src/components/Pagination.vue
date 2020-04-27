@@ -22,7 +22,11 @@
 
 <script>
 export default {
-  props: ['pagination'],
+  computed: {
+    pagination(){
+      return this.$store.state.pagination;
+    }
+  },
   methods: {
     getPage(page){
       this.$emit('getPage', page);

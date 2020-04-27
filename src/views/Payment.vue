@@ -1,6 +1,5 @@
 <template>
   <div>
-    <loading :active.sync="isLoading"></loading>
     <div class="container-fluid">
       <div class="row justify-content-center">
         <div class="col-md-8">
@@ -14,7 +13,7 @@
               <tr class="" v-for="item in order.products" :key="item.id">
                 <!--PC版-->
                 <td class="align-middle d-none d-md-table-cell">
-                  <a href="#" @click.prevent="getProduct(item.product.id)">
+                  <a href="#" @click.prevent="goProductDetail(item.product.id)">
                     {{ item.product.title }} 
                   </a>
                   <small class="text-success d-block" v-if="item.coupon">已套用優惠卷</small>
@@ -29,7 +28,7 @@
                     <tbody>
                       <tr>
                         <td class="p-1 align-middle h5">
-                          <a href="#" @click.prevent="getProduct(item.product.id)">
+                          <a href="#" @click.prevent="goProductDetail(item.product.id)">
                             {{ item.product.title }}
                             <div class="text-success" v-if="item.coupon">
                               <small>已套用優惠卷</small>
@@ -58,7 +57,7 @@
             </tfoot>
           </table>
 
-          <table class="table mb-4">
+          <table class="table mb-4" v-if="order.user">
             <tbody>
               <tr>
                 <th scope="row" width="150">Email</th>
@@ -97,43 +96,35 @@ export default {
   data () {
     return {
       orderId: '',
-      order: {
-        user: {}
-      },
-      isLoading: false,
+    }
+  },
+  computed: {
+    order() {
+      return this.$store.state.order;
     }
   },
   methods: {
-    getProduct(id){
-      this.$router.push({
-        path: `/product/${id}`,
-      })
-    },
-    getOrder(){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/order/${vm.orderId}`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.order = response.data.order;
-        vm.isLoading = false;
-      });
+    goProductDetail(id){
+      const router = this.$router;
+      this.$store.dispatch('goProductDetail', {id, router});
     },
     payOrder(){
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/pay/${vm.orderId}`;
-      vm.isLoading = true;
-      this.$http.post(api).then((response) => {
+      vm.$store.dispatch('updateLoading', true);
+      vm.$http.post(api).then((response) => {
         if(response.data.success){
-          vm.$bus.$emit('message:push', response.data.message, 'success' )
-          vm.getOrder();
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
+          vm.$store.dispatch('getOrder', vm.orderId);
         }
-        vm.isLoading = false;
+        vm.$store.dispatch('updateLoading', false);
       });
     }
   },
   created() {
     this.orderId = this.$route.params.orderId;
-    this.getOrder();
+    this.$store.dispatch('setRouteName', this.$route.name);
+    this.$store.dispatch('getOrder', this.orderId);
   },
 }
 </script>

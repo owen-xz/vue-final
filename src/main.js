@@ -1,4 +1,6 @@
 import Vue from 'vue'
+//import Vuex from 'vuex'
+import store from './store'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 import axios from 'axios';  //主要的Ajax套件
@@ -22,6 +24,7 @@ import currencyFilter from './filters/currency.js';
 import dateFilter from './filters/date.js';
 
 Vue.use(VueAxios, axios);
+//Vue.use(Vuex);
 Vue.component('Loading', Loading);
 Vue.filter('currency', currencyFilter);
 Vue.filter('date', dateFilter);
@@ -44,6 +47,7 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
 

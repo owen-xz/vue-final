@@ -1,65 +1,76 @@
 <template>
   <div>
-    <loading :active.sync="isLoading"></loading>
-    <div class="container">
+    <div class="container pt-4">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent mb-4 px-0">
+          <li class="breadcrumb-item"><router-link to="/">首頁</router-link></li>
+          <li class="breadcrumb-item"><router-link to="/products">美味菜單</router-link></li>
+          <li class="breadcrumb-item"><router-link :to="{path: '/products', query: {category: `${product.category}`}}">{{ product.category }}</router-link></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>
+        </ol>
+      </nav>
       <div class="row">
-        <div class="col-md-6 mt-4">
+        <div class="col-md-7">
           <div class="w-100 bg-cover" :style="{backgroundImage: `url(${product.imageUrl})`}" style="height: 300px"></div>
         </div>
-        <div class="col-md-6 my-4">
+        <div class="col-md-5 my-4">
           <h1 class="h2 mb-3 text-dark">{{ product.title }}</h1>
           <span class="badge badge-desktop text-content p-2 mb-3">{{ product.category }}</span>
           <p class="mb-0 text-content mb-3">{{ product.content }}</p>
-          <div class="d-flex justify-content-end align-items-baseline mb-3">
-            <div class="h4 mb-0 text-right" v-if="product.price === product.origin_price">{{ product.origin_price * qty }} 元</div> 
-            <del class="h6 text-del" v-if="product.price !== product.origin_price">原價 {{ product.origin_price * qty }} 元</del>
-            <div class="h4 mb-0 ml-auto text-danger" v-if="product.price !== product.origin_price">現在只要 {{ product.price * qty }} 元</div>
+          <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+              <div class="h4 mb-0 text-right" v-if="product.price === product.origin_price">{{ product.origin_price | currency }}</div> 
+              <del class="h6 text-del" v-if="product.price !== product.origin_price"> {{ product.origin_price | currency}}</del>
+              <div class="h4 mb-0 text-danger" v-if="product.price !== product.origin_price"> {{ product.price | currency }}</div>
+            </div>
+            <div>
+              <div class="h4 text-content mb-0">小計 {{ product.price * qty | currency }}</div>
+            </div>
           </div>
-          <select name="" class="form-control mb-4" @change="changeQty">
-            <option :value="num" v-for="num in 10" :key="num">
-              選購 {{ num }} {{ product.unit }}
-            </option>
-          </select>
-          <div class="d-flex">
-            <button type="button" class="btn btn-outline-content btn-block" @click="goBack">返回</button>
-            <button type="button" class="btn btn-primary btn-block mt-0 ml-2" @click="addtoCart(product.id)">
-              <i class="fas fa-shopping-cart"></i>
-              加到購物車
-            </button>
+            
+          
+          <div class="row">
+            <div class="col-5">
+              <select name="" class="form-control" @change="changeQty">
+                <option :value="num" v-for="num in 10" :key="num">
+                  選購 {{ num }} {{ product.unit }}
+                </option>
+              </select>
+            </div>
+            <div class="col-7">
+              <button type="button" class="btn btn-primary btn-block" @click="addtoCart(product.id)">
+                <i class="fas fa-shopping-cart"></i>
+                加到購物車
+              </button>
+            </div>      
           </div>
         </div>
         <div class="col" style="margin-top: 100px">
-          <h2 class=" text-center mb-4">現正特價</h2>
+          <h3 class=" text-center mb-4"><b>現正特價</b></h3>
           <div class="swiper-container mb-4">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="item in discountProducts">
-                <div class="card border-0 shadow-sm h-100 card-hover">
-                  <div @click="changeProduct(item.id)" style="cursor: pointer;">
-                    <div class="bg-cover card-img" 
-                      :style="{backgroundImage: `url(${item.imageUrl})`}">
-                    </div>
-                    <div class="card-body d-none d-md-block">
-                      <span class="badge badge-desktop text-content p-2 float-right ml-2">{{ item.category }}</span>
-                      <h5 class="card-title text-dark h4">{{ item.title }}</h5>
-                      <div class="d-flex justify-content-between align-items-baseline">
-                        <div class="h5" v-if="item.price === item.origin_price"> {{ item.origin_price | currency }} </div> 
-                        <del class="h6 text-del" v-if="item.price !== item.origin_price"> {{ item.origin_price | currency }} </del>
-                        <div class="h5" v-if="item.price !== item.origin_price"> {{ item.price | currency }} </div>
+              <div class="swiper-slide" v-for="item in products">
+                <div class="swiper-card">
+                  <div class="card h-100 card-hover shadow-sm">
+                    <div @click="goProductDetail(item.id)" style="cursor: pointer;">
+                      <div class="bg-cover card-img" 
+                        :style="{backgroundImage: `url(${item.imageUrl})`}">
+                      </div>
+                      <div class="card-body text-center">
+                        <h5 class="card-title text-dark h4 text-truncate d-none d-md-block">{{ item.title }}</h5>
+                        <h5 class="card-title text-dark h6 text-truncate d-md-none">{{ item.title }}</h5>
+                        <del class="h6 text-del"> {{ item.origin_price | currency }} </del>
+                        <span class="h5"> {{ item.price | currency }} </span>
                       </div>
                     </div>
-                    <div class="card-body d-md-none p-2">
-                      <h5 class="card-title text-dark h6 text-truncate">{{ item.title }}</h5>
-                        <del class="h6 text-del"> {{ item.origin_price | currency }} </del>
-                        <div class="h5"> {{ item.price | currency }} </div>
-                    </div>
                   </div>
-                  <div class="card-footer bg-desktop d-md-flex d-none">
+                  <div class="card-footer bg-transparent d-md-flex d-none">
                     <button type="button" class="btn btn-title btn-block" @click="addtoCart(item.id)">
                       <i class="fas fa-shopping-cart"></i>
                       加到購物車
                     </button>
                   </div>
-                </div>
+                </div>                
               </div>
             </div>
             <div class="swiper-button-next text-title"></div>
@@ -77,11 +88,20 @@ import 'swiper/css/swiper.min.css';
 export default {
   data () {
     return {
-      product: {},
-      discountProducts: [],
       cart: {},
       qty: 1,
-      isLoading: false,
+      swiperIsReady: false
+    }
+  },
+  computed: {
+    product(){
+      return this.$store.state.product;
+    },
+    products(){
+      return (this.$store.state.products.filter(item => {
+        if(item.origin_price !== item.price && item.id !== this.product.id)
+          return true;
+      }))
     }
   },
   methods: {
@@ -92,81 +112,57 @@ export default {
       this.qty = event.target.value;
     },
     addtoCart(id){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      vm.isLoading = true;
-      let qty = parseInt(this.qty);
-      const cart = {
-        product_id: id,
-        qty
-      }
-      this.$http.post(api, {data: cart}).then((response) => {
-        vm.$bus.$emit('message:push', response.data.message, 'success' )
-        vm.isLoading = false;
-        vm.getCart();
-      });
+      this.$store.dispatch('addToCart', {id, qty});
     },
-    getCart(){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-      this.$http.get(api).then((response) => {
-        vm.cart = response.data.data;
-        vm.$emit('getCartNum', vm.cart.carts.length);
-      });
+    getProduct(id){
+      const router = this.$router;
+      this.$store.dispatch('getProduct', {id, router});
     },
-    changeProduct(id){
-      const vm = this;
-      window.document.body.scrollTop= 0;
-      window.document.documentElement.scrollTop = 0;
-      vm.$router.push({
-        path: `/product/${id}`,
-      });
-      vm.getProducts();
+    goProductDetail(id){
+      const router = this.$router;
+      this.$store.dispatch('goProductDetail', {id, router});
+      this.$store.dispatch('getProduct', id);
     },
-    getProducts(){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.product = (response.data.products).find(item => {
-          if(item.id === this.$route.params.id){
-            return true;
-          }
-        })
-        vm.discountProducts = (response.data.products).filter(item => {
-          if(item.origin_price !== item.price && item.id !== vm.product.id)
-            return true;
-        })
-        vm.isLoading = false;
-      });
+    swiperInit(){
+      var mySwiper = new Swiper ('.swiper-container', {
+        direction: 'horizontal',
+        autoplay: true,
+        slidesPerView: 3,
+        spaceBetween: 10,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          768: {
+            spaceBetween: 30,
+          },
+          992: {
+            spaceBetween: 40,
+          },
+          1280: {
+            spaceBetween: 50,
+          },
+        },
+        observer:true,//修改swiper自己或子元素時，自動初始化swiper
+        observeParents:true,//修改swiper的父元素時，自動初始化swiper
+      })
+      this.swiperIsReady = true;
     }
   },
-  mounted() {
-    var mySwiper = new Swiper ('.swiper-container', {
-      direction: 'horizontal',
-
-      slidesPerView: 3,
-      spaceBetween: 10,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      observer:true,//修改swiper自己或子元素時，自動初始化swiper
-      observeParents:true,//修改swiper的父元素時，自動初始化swiper
-    })
-    this.timeout = setTimeout(() => {
-      mySwiper.slideTo(0, 0, false)
-    }, 500)
-  },
   created() {
-    //取得目標商品的資料
-    this.getProducts();
+    const id = this.$route.params.id
+    this.$store.dispatch('getProduct', id);
+    this.swiperInit();
+    this.timeout = setTimeout(() => {
+      this.swiperInit();
+    }, 1000)
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 .swiper-container {
     width: 100%;
 
@@ -177,6 +173,17 @@ export default {
 @media(min-width: 768px){
   .card-img{
     height: 200px
+  }
+}
+.swiper-card{
+  .btn{
+    opacity: 0;
+    transition: all 0.3s
+  }
+}
+.swiper-card:hover{
+  .btn{
+    opacity: 1;
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="">
-     <div class="container-fluid">
+     <div class="container-lg">
       <div class="row">
         <div class="col">
           <h1 class="text-center h2 my-4">我的訂單</h1>
@@ -78,7 +78,7 @@
           </div>
           
 
-          <Pagination class="d-flex justify-content-center mb-4" :pagination="pagination" @getPage="getOrders"></Pagination>
+          <Pagination class="d-flex justify-content-center mb-4"  @getPage="getOrders"></Pagination>
           
         </div>
       </div>  
@@ -94,56 +94,27 @@ export default {
   },
   data(){
     return {
-      orders: [],
-      order: {},
-      isLoading: false,
-      pagination: {}
+    }
+  },
+  computed: {
+    orders(){
+      return this.$store.state.orders;
+    },
+    pagination(){
+      return this.$store.state.pagination;
     }
   },
   methods: {
     getOrders(page = 1){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/orders?page=${page}`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.orders = response.data.orders;
-        // vm.orders.forEach(item => {
-        //   item.create_at = new Date(item.create_at).Format("yyyy-MM-dd");
-        // })
-        vm.isLoading = false;
-        vm.pagination = response.data.pagination;
-      });
+      this.$store.dispatch('getOrders', page);
     },
     checkOrder(id){
       this.$router.push(`/checkout/${id}`)
     }
   },
-  mounted() {    
-    // Date.prototype.Format = function(fmt)   
-    // { 
-    // //author:wangweizhen
-    //   var o = {   
-    //     "M+" : this.getMonth()+1,                 //月份   
-    //     "d+" : this.getDate(),                    //日
-    //     "h+" : this.getHours(),                   //小时   
-    //     "m+" : this.getMinutes(),                 //分   
-    //     "s+" : this.getSeconds(),                 //秒   
-    //     "q+" : Math.floor((this.getMonth()+3)/3), //季度   
-    //     "S"  : this.getMilliseconds()             //毫秒   
-    //   };   
-    //   if(/(y+)/.test(fmt))   
-    //     fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
-    //   for(var k in o)   
-    //     if(new RegExp("("+ k +")").test(fmt))   
-    //       fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
-    //   return fmt;   
-    // };
-
-    this.getOrders();
-
-  },
   created() {
-    this.$emit('sendRoute', this.$route.name);
+    this.$store.dispatch('setRouteName', this.$route.name);
+    this.getOrders();
   },
 }
 </script>

@@ -145,22 +145,20 @@ export default {
   },
   data(){
     return {
-      orders: [],
       tempOrder: {},
-      isLoading: false,
-      pagination: {}
+    }
+  },
+  computed: {
+    orders(){
+      return this.$store.state.orders;
+    },
+    pagination(){
+      return this.$store.state.pagination;
     }
   },
   methods: {
     getOrders(page = 1){
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/orders?page=${page}`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.orders = response.data.orders;
-        vm.isLoading = false;
-        vm.pagination = response.data.pagination;
-      });
+      this.$store.dispatch('getOrders', page);
     },
     removeProduct(productId){
       let order = this.tempOrder;
@@ -172,33 +170,30 @@ export default {
       let order = this.tempOrder;
       order.products = Object.assign({}, order.products);  //淺層複製才不會改到orders
       let tempProduct = Object.assign({}, order.products[productId]);
-      let priceChange;
+      let priceChange = parseInt(tempProduct.product.price);
+      let final_priceChange;
+      if(tempProduct.coupon){
+        final_priceChange = priceChange * parseInt(tempProduct.coupon.percent) / 100;
+      } else {
+        final_priceChange = priceChange;
+      }
+      
       if(operator === '-') {
         tempProduct.qty --;
         if(tempProduct.qty === 0){
           this.removeProduct(productId);
         } else {
-          tempProduct.total -= parseInt(tempProduct.product.price);
-          if(tempProduct.coupon) {
-            priceChange = parseInt(tempProduct.product.price) * parseInt(tempProduct.coupon.percent) / 100;
-          } else {
-            priceChange = parseInt(tempProduct.product.price);
-          }
-          tempProduct.final_total -= priceChange;
+          tempProduct.total -= priceChange;
+          tempProduct.final_total -= final_priceChange;
           order.products[productId] = tempProduct;
-          order.total -= priceChange;
+          order.total -= final_priceChange;
         } 
       } else if( operator === '+') {
         tempProduct.qty ++;
-        tempProduct.total += parseInt(tempProduct.product.price);
-        if(tempProduct.coupon) {
-          priceChange = parseInt(tempProduct.product.price) * parseInt(tempProduct.coupon.percent) / 100;
-        } else {
-          priceChange = parseInt(tempProduct.product.price);
-        }
-        tempProduct.final_total += priceChange;
+        tempProduct.total += priceChange;
+        tempProduct.final_total += final_priceChange;
         order.products[productId] = tempProduct;
-        order.total += priceChange;
+        order.total += final_priceChange;
       }
     },
     updateOrder(){
@@ -206,12 +201,12 @@ export default {
       let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/order/${vm.tempOrder.id}`;
       this.$http.put(api, {data: vm.tempOrder}).then((response) => {
         if(response.data.success){
-          $('#orderModal').modal('hide');
-          vm.getOrders();
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
         }else{
-          $('#orderModal').modal('hide');
-          vm.getOrders();
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' }); 
         }
+        $('#orderModal').modal('hide');
+        vm.getOrders();
       });
     },
     openModal(item){
@@ -220,7 +215,7 @@ export default {
     }
   },
   created() {    
-    this.$emit('sendRoute', this.$route.name);
+    this.$store.dispatch('setRouteName', this.$route.name);
     this.getOrders();
   },
 }

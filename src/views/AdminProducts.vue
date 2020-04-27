@@ -1,6 +1,5 @@
 <template>
   <div>
-    <loading :active.sync="isLoading"></loading>
     <div class="text-right mt-4">
       <button class="btn btn-primary" @click="openModal(true)">建立新產品</button>
     </div>
@@ -27,7 +26,7 @@
               <span v-else>未啟用</span>
             </td>
             <td>
-              <button class="btn btn-danger btn-sm" @click="openDelModal(item)">刪除</button>
+              <button class="btn btn-danger btn-sm" @click.stop="openDelModal(item)">刪除</button>
             </td>
           </tr>
         </tbody>
@@ -204,22 +203,25 @@ export default {
       products: [],
       tempProduct: {},
       isNew: false,
-      isLoading: false,
       status: {
         fileUploading: false
       },
-      pagination: {}
+    }
+  },
+  computed: {
+    pagination(){
+      return this.$store.state.pagination;
     }
   },
   methods: {
     getProducts(page = 1){
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products?page=${page}`;
-      vm.isLoading = true;
+      vm.$store.dispatch('updateLoading', true);
       this.$http.get(api).then((response) => {
         vm.products = response.data.products;
-        vm.isLoading = false;
-        vm.pagination = response.data.pagination;
+        vm.$store.dispatch('updateLoading', false);
+        vm.$store.dispatch('getPagination', response.data.pagination);
       })
     },
     openModal(isNew, item){
@@ -246,18 +248,23 @@ export default {
       }
       this.$http[httpMethod](api, {data: vm.tempProduct}).then((response) => {
         if(response.data.success){
-          $('#productModal').modal('hide');
-          vm.getProducts();
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
         }else{
-          $('#productModal').modal('hide');
-          vm.getProducts();
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' }); 
         }
+        $('#productModal').modal('hide');
+        vm.getProducts();
       });
     },
     deleteProduct(item){
       const vm = this;
       let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${item.id}`;
       this.$http.delete(api).then((response) => {
+        if(response.data.success){
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
+        }else{
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' }); 
+        }
         vm.getProducts();
         $('#delProductModal').modal('hide');
       });
@@ -275,7 +282,6 @@ export default {
         }
       }).then((response) => {
         if(response.data.success){
-          //vm.tempProduct.imageUrl = response.data.imageUrl;  //直接寫入畫面無法即時更新
           vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl);
         }else{
           vm.$bus.$emit('message:push', response.data.message, 'danger' )
@@ -285,7 +291,7 @@ export default {
     }
   },
   mounted() {
-    this.$emit('sendRoute', this.$route.name);
+    this.$store.dispatch('setRouteName', this.$route.name);
     this.getProducts();
   },
 }
