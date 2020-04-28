@@ -119,14 +119,14 @@
             <div class="table-responsive" v-if="favorite.length">
               <table class="table table-hover">
                 <tbody>
-                  <tr v-for="(item, index) in favorite" style="cursor: pointer" @click="goProductDetail(item.id)">
+                  <tr v-for="item in favorite" :key="item.id" style="cursor: pointer" @click="goProductDetail(item.id)">
                     <td class="align-middle" width="50">
                       <button class="btn btn-outline-title btn-sm" @click.stop="addtoCart(item.id)"><i class="fas fa-cart-plus"></i></button> 
                     </td>
                     <td class="align-middle" width="80"><img :src="item.imageUrl" alt="" class="img-fluid" height="60" width="60"></td>
                     <td class="align-middle text-truncate">{{ item.title }}</td>
                     <td class="align-middle" width="50">
-                      <button class="btn btn-outline-danger btn-sm" @click.stop="removeFavorite(item, index)"><i class="fas fa-trash-alt"></i></button>
+                      <button class="btn btn-outline-danger btn-sm" @click.stop="removeFavorite(item)"><i class="fas fa-trash-alt"></i></button>
                     </td>
                   </tr>
                 </tbody>
@@ -200,10 +200,8 @@ export default {
     addtoCart(id, qty = 1){
       this.$store.dispatch('addtoCart', {id, qty});
     },
-    removeFavorite(item, index){
-      const favoriteIndex = index;
-      const productIndex = this.$store.state.products.findIndex(product => product.id === item.id)
-      this.$store.dispatch('setFavorite', {item, favoriteIndex, productIndex});
+    removeFavorite(item){
+      this.$store.dispatch('setFavorite', item);
     }
   },
   created() {

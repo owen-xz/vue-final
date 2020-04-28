@@ -20,7 +20,6 @@ export default new Vuex.Store({
       isLoading: false,
       isLogin: false,
       adIsShow: true,
-      initialLike: true
     }
   },
   actions: {
