@@ -20,6 +20,7 @@ export default new Vuex.Store({
       isLoading: false,
       isLogin: false,
       adIsShow: true,
+      initialLike: true
     }
   },
   actions: {
@@ -124,14 +125,15 @@ export default new Vuex.Store({
     closeAd(context){
       context.commit('ADISSHOW', false);
     },
-    setFavorite(context, {item, favoriteIndex, productIndex}){
-      if(favoriteIndex === -1){
+    setFavorite(context, item){
+      const index = context.state.favorite.indexOf(item);
+      if(index === -1){
         const method = 'add';
-        context.commit('FAVORITE', {item, productIndex, method});
+        context.commit('FAVORITE', {item, method});
         context.dispatch('updateMessage', { message: '已加入我的最愛', status: 'success' });
       }else{
         const method = 'del';
-        context.commit('FAVORITE', {favoriteIndex, productIndex, method});
+        context.commit('FAVORITE', {index, method});
         context.dispatch('updateMessage', { message: '已刪除我的最愛', status: 'success' });
       }
       const favoriteId = context.state.favorite.map(item => item.id);
@@ -144,15 +146,11 @@ export default new Vuex.Store({
     },
     PRODUCTS(state, payload) {
       state.products = payload;
-      state.products.forEach(item => {
-        Vue.set(item, 'isLike', false)      
-      })
       const favoriteId =  JSON.parse(localStorage.getItem('favorite')) || [];
       if(favoriteId.length){
         state.products.forEach(i => {
           favoriteId.forEach(j => {
             if(i.id === j){
-              i.isLike = true;
               state.favorite.push(i);
             }
           })
@@ -203,10 +201,8 @@ export default new Vuex.Store({
     FAVORITE(state, payload) {
       if(payload.method === 'add'){
         state.favorite.push(payload.item);
-        state.products[payload.productIndex].isLike = true;
       } else if(payload.method === 'del') {
-        state.favorite.splice(payload.favoriteIndex, 1);
-        state.products[payload.productIndex].isLike = false;
+        state.favorite.splice(payload.index, 1);
       } 
     },
   },

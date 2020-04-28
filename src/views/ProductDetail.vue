@@ -112,10 +112,6 @@ export default {
     addtoCart(id){
       this.$store.dispatch('addToCart', {id, qty});
     },
-    getProduct(id){
-      const router = this.$router;
-      this.$store.dispatch('getProduct', {id, router});
-    },
     goProductDetail(id){
       const router = this.$router;
       this.$store.dispatch('goProductDetail', {id, router});
