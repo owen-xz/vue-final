@@ -12,7 +12,8 @@
         <div class="col-md-9">
           
           <div class="row">
-            <Card class="col-lg-4 col-md-6 mb-4" v-for="item in filterProducts" :key="item.id" :card-data="item" @setFavorite="setFavorite"></Card>
+            <Card class="col-lg-4 col-md-6 mb-4" v-for="item in filterProducts" :key="item.id"
+             :card-data="item" :favorite-data="favorite" @setFavorite="setFavorite"></Card>
           </div>
         </div>
       </div>
@@ -44,7 +45,7 @@ export default {
         return this.products.filter(item => item.category === this.category);
       }     
     },
-    ...mapGetters(['products', 'category'])
+    ...mapGetters(['products', 'category', 'favorite'])
   },
   methods: {
     setFavorite(item){

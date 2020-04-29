@@ -29,16 +29,16 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
-  props: ['cardData'],
+  props: ['cardData', 'favoriteData'],
   computed: {
     likeColor(){
-      if(this.favorite.indexOf(this.cardData) === -1){
+      if(this.favoriteData.indexOf(this.cardData) === -1){
         return 'far';
       }else{
         return 'fas';
       }
     },
-    ...mapGetters(['favorite'])
+    //...mapGetters(['favorite'])
   },
   methods: {
     goProductDetail(id){

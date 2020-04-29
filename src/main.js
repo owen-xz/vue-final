@@ -2,7 +2,7 @@ import Vue from 'vue'
 //import Vuex from 'vuex'
 import store from './store'
 import '@fortawesome/fontawesome-free/css/all.css'
-import '@fortawesome/fontawesome-free/js/all.js'
+//import '@fortawesome/fontawesome-free/js/all.js'
 import axios from 'axios';  //主要的Ajax套件
 import VueAxios from 'vue-axios';  //將它轉為vue的套件
 import 'bootstrap';
