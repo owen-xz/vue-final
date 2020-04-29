@@ -38,7 +38,6 @@ export default {
         return 'fas';
       }
     },
-    //...mapGetters(['favorite'])
   },
   methods: {
     goProductDetail(id){

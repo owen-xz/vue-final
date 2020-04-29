@@ -40,7 +40,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto text-center">
               <li class="nav-item">
-                <router-link class="nav-link header-link" :class="{'active': activeLink==='Products'}" to="/products">美味菜單</router-link>
+                <router-link class="nav-link header-link" :class="{'active': activeLink==='Products'}" to="/products" @click.native="changeCategory('所有商品')">美味菜單</router-link>
               </li>
               <li class="nav-item">
                 <router-link class="nav-link header-link" :class="{'active': activeLink==='Order'}" to="/order">我的訂單</router-link>
@@ -164,6 +164,9 @@ export default {
     ...mapGetters(['cart', 'activeLink', 'isLogin', 'adIsShow', 'favorite'])
   },
   methods: {
+    changeCategory(category){
+      this.$store.dispatch('changeCategory', category);
+    },
     goProductDetail(id){
       const router = this.$router;
       this.$store.dispatch('goProductDetail', {id, router});

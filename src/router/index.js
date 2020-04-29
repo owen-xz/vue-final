@@ -11,7 +11,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import ('../views/Login.vue')
+    component: () => import ('../views/back/Login.vue')
   },
   {
     path:'/',
@@ -20,37 +20,37 @@ const routes = [
       {
         path: '',
         name: 'Home',
-        component: () => import ('../views/Home.vue')
+        component: () => import ('../views/front/Home.vue')
       },
       {
         path: 'products',
         name: 'Products',
-        component: () => import ('../views/Products.vue')
+        component: () => import ('../views/front/Products.vue')
       },
       {
         path: 'product/:id',
         name: 'ProductDetail',
-        component: () => import ('../views/ProductDetail.vue')
+        component: () => import ('../views/front/ProductDetail.vue')
       },
       {
         path: 'cart',
         name: 'Cart',
-        component: () => import ('../views/Cart.vue')
+        component: () => import ('../views/front/Cart.vue')
       },
       {
         path: 'checkout',
         name: 'Checkout',
-        component: () => import ('../views/Checkout.vue')
+        component: () => import ('../views/front/Checkout.vue')
       },
       {
         path: 'checkout/:orderId',
         name: 'Payment',
-        component: () => import ('../views/Payment.vue')
+        component: () => import ('../views/front/Payment.vue')
       },
       {
         path: 'order',
         name: 'Order',
-        component: () => import ('../views/Order.vue')
+        component: () => import ('../views/front/Order.vue')
       }
     ]
   },
@@ -62,19 +62,19 @@ const routes = [
       {
         path: 'products',
         name: 'AdminProducts',
-        component: () => import ('../views/AdminProducts.vue'),
+        component: () => import ('../views/back/AdminProducts.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: 'coupon',
         name: 'AdminCoupon',
-        component: () => import ('../views/AdminCoupon.vue'),
+        component: () => import ('../views/back/AdminCoupon.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: 'order',
         name: 'AdminOrder',
-        component: () => import ('../views/AdminOrder.vue'),
+        component: () => import ('../views/back/AdminOrder.vue'),
         meta: { requiresAuth: true }
       },
     ]
