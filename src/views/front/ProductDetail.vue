@@ -125,7 +125,8 @@ export default {
     }
   },
   created() {
-    const id = this.$route.params.id
+    let id = this.$route.params.id;
+    //console.log(this.$route.params.id)
     this.$store.dispatch('getProduct', id);
     this.timeout = setTimeout(() => {
       this.swiperInit();

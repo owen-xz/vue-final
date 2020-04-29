@@ -28,9 +28,10 @@ export default {
     goProductDetail(id){
       const router = this.$router;
       this.$store.dispatch('goProductDetail', {id, router});
+      this.$store.dispatch('getProduct', id);
     },
     addtoCart(id, qty = 1){
-      this.$store.dispatch('addToCart', {id, qty});
+      this.$store.dispatch('addtoCart', {id, qty});
     },
   }
 }

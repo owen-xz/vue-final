@@ -18,24 +18,24 @@
                   <th scope="col" width="140">數量</th>
                   <th scope="col" width="80">單價</th>
                 </tr>
-                <tr class="" v-for="item in cart.carts" :key="item.id">
+                <tr class="" v-for="item in cart.carts" :key="item.id" @click="goProductDetail(item.product.id)" style="cursor: pointer">
                   <!--PC版-->
                   <td class="align-middle" width="30">
-                    <button type="button" class="btn btn-outline-danger btn-sm" @click="removeCartItem(item.id)">
+                    <button type="button" class="btn btn-outline-danger btn-sm" @click.stop="removeCartItem(item.id)">
                       <i class="fas fa-trash-alt"></i>
                     </button>
                   </td>
                   <td class="d-none d-md-table-cell align-middle" width="120" height="120">
-                    <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="getProduct(item.product.id)" style="cursor: pointer">
+                    <img class="img-fluid" :src="item.product.imageUrl" alt="">
                   </td>
                   <td class="align-middle d-none d-md-table-cell">
-                    <a href="#" @click="goProductDetail(item.product.id)">{{ item.product.title }}</a>
+                    <a href="#">{{ item.product.title }}</a>
                   </td>
                   <td class="align-middle d-none d-md-table-cell">
                     <div class="d-flex align-items-center">
-                      <a href="#" class="btn btn-sm btn-title p-0 mr-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item, '-')">-</a>
+                      <a href="#" class="btn btn-sm btn-title p-0 mr-2" style="width: 25px; height: 25px" @click.prevent.stop="changeQty(item, '-')">-</a>
                       {{ item.qty }}/{{ item.product.unit }}
-                      <a href="#" class="btn btn-sm btn-title p-0 ml-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item, '+')">+</a>
+                      <a href="#" class="btn btn-sm btn-title p-0 ml-2" style="width: 25px; height: 25px" @click.prevent.stop="changeQty(item, '+')">+</a>
                     </div>
                   </td>
                   <td class="align-middle text-right d-none d-md-table-cell">{{ item.total | currency }}</td>
@@ -47,19 +47,19 @@
                       <tbody>
                         <tr>
                           <td class="p-1 align-middle h5">
-                            <a href="#" @click.prevent="goProductDetail(item.product.id)">{{ item.product.title }}</a>
+                            <a href="#">{{ item.product.title }}</a>
                           </td>
                           <td width="100" class="p-1">
-                            <img class="img-fluid" :src="item.product.imageUrl" alt="" @click="getProduct(item.product.id)" style="cursor: pointer">
+                            <img class="img-fluid" :src="item.product.imageUrl" alt="">
                           </td>
                         </tr>
                         <tr>
                           <td class="p-1">數量</td>
                           <td class="p-1 align-middle text-right" width="120">
                             <div class="d-flex align-items-center justify-content-end">
-                              <a href="#" class="btn btn-sm btn-title p-0 mr-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item, '-')">-</a>
+                              <a href="#" class="btn btn-sm btn-title p-0 mr-2" style="width: 25px; height: 25px" @click.prevent.stop="changeQty(item, '-')">-</a>
                               {{ item.qty }}/{{ item.product.unit }}
-                              <a href="#" class="btn btn-sm btn-title p-0 ml-2" style="width: 25px; height: 25px" @click.prevent="changeQty(item, '+')">+</a>
+                              <a href="#" class="btn btn-sm btn-title p-0 ml-2" style="width: 25px; height: 25px" @click.prevent.stop="changeQty(item, '+')">+</a>
                             </div>
                           </td>
                         </tr>

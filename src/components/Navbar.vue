@@ -19,10 +19,10 @@
               <div class="bg-danger cart-num d-flex justify-content-center align-items-center text-white" v-if="favoriteNum>0">{{ favoriteNum }}</div>
               <i class="fas fa-thumbs-up fa-2x"></i>
             </a>
-            <a href="#" class="nav-link ml-auto p-2" data-toggle="dropdown" style="position: relative">
+            <router-link href="#" class="nav-link ml-auto p-2" to="/cart" style="position: relative">
               <div class="bg-danger cart-num d-flex justify-content-center align-items-center text-white" v-if="cartNum>0">{{ cartNum }}</div>
               <i class="fas fa-shopping-cart fa-2x"></i>
-            </a>
+            </router-link>
 
             <div class="dropdown">
               <a href="#" class="nav-link p-2" data-toggle="dropdown"><i class="fas fa-cog fa-2x"></i></a type="button">
@@ -121,12 +121,12 @@
                 <tbody>
                   <tr v-for="item in favorite" :key="item.id" style="cursor: pointer" @click="goProductDetail(item.id)">
                     <td class="align-middle" width="50">
-                      <button class="btn btn-outline-title btn-sm" @click.stop="addtoCart(item.id)"><i class="fas fa-cart-plus"></i></button> 
+                      <button class="btn btn-outline-danger btn-sm" @click.stop="removeFavorite(item)"><i class="fas fa-trash-alt"></i></button> 
                     </td>
                     <td class="align-middle" width="80"><img :src="item.imageUrl" alt="" class="img-fluid" height="60" width="60"></td>
                     <td class="align-middle text-truncate">{{ item.title }}</td>
                     <td class="align-middle" width="50">
-                      <button class="btn btn-outline-danger btn-sm" @click.stop="removeFavorite(item)"><i class="fas fa-trash-alt"></i></button>
+                      <button class="btn btn-outline-title btn-sm" @click.stop="addtoCart(item.id)"><i class="fas fa-cart-plus"></i></button>
                     </td>
                   </tr>
                 </tbody>
