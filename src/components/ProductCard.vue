@@ -1,57 +1,64 @@
 <template>
   <div>
     <div class="card border-0 shadow-sm h-100 card-hover">
-    <div @click="goProductDetail(cardData.id)" style="cursor: pointer;">
-      <div class="bg-cover text-right" style="height: 200px;" :style="{backgroundImage: `url(${cardData.imageUrl})`}"></div>
+      <div @click="goProductDetail(cardData.id)" style="cursor: pointer;">
+        <div class="bg-cover text-right card-img" style="height: 200px;"
+        :style="{backgroundImage: `url(${cardData.imageUrl})`}"></div>
         <div class="card-body">
-          <span class="badge badge-desktop text-content p-2 float-right ml-2">{{ cardData.category }}</span>
+          <span class="badge badge-desktop text-content p-2 float-right ml-2">
+            {{ cardData.category }}
+          </span>
           <h5 class="card-title text-dark h4">{{ cardData.title }}</h5>
-          <div class="d-flex justify-content-between align-items-baseline">
-            <div class="h5" v-if="cardData.price === cardData.origin_price"> {{ cardData.origin_price | currency }} </div> 
-            <del class="h6 text-del" v-if="cardData.price !== cardData.origin_price"> {{ cardData.origin_price | currency }} </del>
-            <div class="h5" v-if="cardData.price !== cardData.origin_price"> {{ cardData.price | currency }} </div>
+          <div class="d-flex  align-items-baseline">
+            <div class="h5" v-if="cardData.price === cardData.origin_price">
+              {{ cardData.origin_price | currency }}
+            </div>
+            <del class="h6 text-del mr-2" v-if="cardData.price !== cardData.origin_price">
+              {{ cardData.origin_price | currency }}
+            </del>
+            <div class="h5" v-if="cardData.price !== cardData.origin_price">
+              {{ cardData.price | currency }}
+            </div>
+            <a href="#" class="text-content h3 mb-0 ml-auto mr-3" @click.stop.prevent="setFavorite">
+              <slot><i class="fa-heart" :class="likeColor"></i></slot>
+            </a>
+            <a href="#" class="text-content h3 mb-0" @click.stop.prevent="addtoCart(cardData.id)">
+              <slot><i class="fas fa-cart-plus"></i></slot>
+            </a>
           </div>
         </div>
-      </div>
-      <div class="card-footer bg-desktop d-flex align-items-center">
-        <a href="#" class="text-title h3 mb-0 mr-3"  @click.prevent="setFavorite">
-          <slot><i class="fa-thumbs-up" :class="likeColor"></i></slot>
-        </a>
-        <button type="button" class="btn btn-title btn-block" @click="addtoCart(cardData.id)">
-          <i class="fas fa-shopping-cart"></i>
-          加到購物車
-        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
   props: ['cardData', 'favoriteData'],
+  data() {
+    return {
+    };
+  },
   computed: {
-    likeColor(){
-      if(this.favoriteData.indexOf(this.cardData) === -1){
+    likeColor() {
+      if (this.favoriteData.indexOf(this.cardData) === -1) {
         return 'far';
-      }else{
-        return 'fas';
       }
+      return 'fas';
     },
   },
   methods: {
-    goProductDetail(id){
-      const router = this.$router;
-      this.$store.dispatch('goProductDetail', {id, router});
+    goProductDetail(id) {
+      this.$router.push(`/product/${id}`);
     },
-    addtoCart(id, qty = 1){
-      this.$store.dispatch('addtoCart', {id, qty});
-    }, 
-    setFavorite(){
-      this.$emit('setFavorite', this.cardData)
-    }
+    addtoCart(id, qty = 1) {
+      this.$store.dispatch('addtoCart', { id, qty });
+    },
+    setFavorite() {
+      this.$emit('setFavorite', this.cardData);
+    },
   },
-}
+};
 </script>
 
 <style scoped>

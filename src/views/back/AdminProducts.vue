@@ -63,17 +63,24 @@
               </tr>
             </table>
             <div class="form-row mb-4">
-              <div class="col"><button class="btn btn-primary btn-block" @click="openModal(false, item)">編輯</button></div>
-              <div class="col"><button class="btn btn-danger btn-block" @click="openDelModal(item)">刪除</button></div>
-            </div>   
+              <div class="col">
+                <button class="btn btn-primary btn-block" @click="openModal(false, item)">
+                  編輯
+                </button>
+              </div>
+              <div class="col">
+                <button class="btn btn-danger btn-block" @click="openDelModal(item)">
+                  刪除
+                </button>
+              </div>
+            </div>
           </tr>
         </tbody>
       </table>
     </div>
-    
-    
-    
-    <Pagination class="d-flex justify-content-center mb-4" :pagination="pagination" @getPage="getProducts"></Pagination>
+
+    <Pagination class="d-flex justify-content-center mb-4"
+    :pagination="pagination" @getPage="getProducts"></Pagination>
 
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -197,103 +204,103 @@ import Pagination from '../../components/Pagination.vue';
 
 export default {
   components: {
-    'Pagination': Pagination
+    Pagination,
   },
-  data () {
+  data() {
     return {
       products: [],
       tempProduct: {},
       isNew: false,
       status: {
-        fileUploading: false
+        fileUploading: false,
       },
-    }
+    };
   },
   computed: {
-    ...mapGetters(['pagination'])
+    ...mapGetters(['pagination']),
   },
   methods: {
-    getProducts(page = 1){
+    getProducts(page = 1) {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products?page=${page}`;
       vm.$store.dispatch('updateLoading', true);
-      this.$http.get(api).then((response) => {
+      vm.$http.get(api).then((response) => {
         vm.products = response.data.products;
         vm.$store.dispatch('updateLoading', false);
         vm.$store.dispatch('getPagination', response.data.pagination);
-      })
+      });
     },
-    openModal(isNew, item){
-      if(isNew){
+    openModal(isNew, item) {
+      if (isNew) {
         this.tempProduct = {};
         this.isNew = true;
-      }else{
-        this.tempProduct = Object.assign({}, item);  //此為ES6的寫法，因為物件傳參考的特性，這裡不能直接寫this.tempProduct = item
+      } else {
+        this.tempProduct = { ...item };
         this.isNew = false;
       }
       $('#productModal').modal('show');
     },
-    openDelModal(item){
-      this.tempProduct = Object.assign({}, item);
+    openDelModal(item) {
+      this.tempProduct = { ...item };
       $('#delProductModal').modal('show');
     },
-    updateProduct(){
+    updateProduct() {
       const vm = this;
       let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product`;
       let httpMethod = 'post';
-      if(!vm.isNew){
+      if (!vm.isNew) {
         api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${vm.tempProduct.id}`;
         httpMethod = 'put';
       }
-      this.$http[httpMethod](api, {data: vm.tempProduct}).then((response) => {
-        if(response.data.success){
+      vm.$http[httpMethod](api, { data: vm.tempProduct }).then((response) => {
+        if (response.data.success) {
           vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
-        }else{
-          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' }); 
+        } else {
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
         }
         $('#productModal').modal('hide');
         vm.getProducts();
       });
     },
-    deleteProduct(item){
+    deleteProduct(item) {
       const vm = this;
-      let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${item.id}`;
-      this.$http.delete(api).then((response) => {
-        if(response.data.success){
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${item.id}`;
+      vm.$http.delete(api).then((response) => {
+        if (response.data.success) {
           vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
-        }else{
-          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' }); 
+        } else {
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
         }
         vm.getProducts();
         $('#delProductModal').modal('hide');
       });
     },
-    uploadFile(){
+    uploadFile() {
       const uploadedFile = this.$refs.files.files[0];
       const vm = this;
       const formData = new FormData();
-      formData.append("file-to-upload", uploadedFile);
+      formData.append('file-to-upload', uploadedFile);
       const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/upload`;
       vm.status.fileUploading = true;
-      this.$http.post(url, formData, {
+      vm.$http.post(url, formData, {
         headers: {
-          'Content-Type': "multipart/form-data"
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       }).then((response) => {
-        if(response.data.success){
+        if (response.data.success) {
           vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl);
-        }else{
-          vm.$bus.$emit('message:push', response.data.message, 'danger' )
+        } else {
+          vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
         }
         vm.status.fileUploading = false;
       });
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('setRouteName', this.$route.name);
     this.getProducts();
   },
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

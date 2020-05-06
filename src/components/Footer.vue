@@ -4,11 +4,17 @@
       <small>
         資料、圖片來源皆來自網路，僅用來做為學習用途。
       </small>
-    </div>      
+    </div>
   </div>
 </template>
 
 <script>
+export default {
+  data() {
+    return {
+    };
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

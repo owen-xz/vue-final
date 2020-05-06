@@ -3,26 +3,31 @@
     <loading :active.sync="isLoading"></loading>
     <div :class="{'ad': adIsShow, 'noAd': !adIsShow}">
       <router-view/>
-    </div> 
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+
 export default {
   name: 'App',
+  data() {
+    return {
+    };
+  },
   computed: {
-    ...mapGetters(['isLoading', 'adIsShow'])
+    ...mapGetters(['isLoading', 'adIsShow']),
   },
   created() {
     this.$store.dispatch('getProducts');
     this.$store.dispatch('getCart');
   },
-}
+};
 </script>
 
 <style lang="scss">
-@import "./assets/all";
+@import "./assets/scss/all";
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -49,8 +54,4 @@ export default {
   border-bottom: 1px solid rgb(222, 226, 230);
   border-top: 1px solid rgb(222, 226, 230);
 }
-@media(min-height: 768px){
-  margin-top: 66.4px;
-}
 </style>
-

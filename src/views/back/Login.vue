@@ -3,9 +3,11 @@
   <form class="form-signin" @submit.prevent="signin">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" class="form-control" v-model="user.username" placeholder="Email address" required autofocus>
+    <input type="email" id="inputEmail" class="form-control"
+    v-model="user.username" placeholder="Email address" required autofocus>
     <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" v-model="user.password" placeholder="Password" required>
+    <input type="password" id="inputPassword" class="form-control"
+    v-model="user.password" placeholder="Password" required>
     <div class="checkbox mb-3">
       <label>
         <input type="checkbox" value="remember-me"> Remember me
@@ -19,30 +21,30 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       user: {
         username: '',
-        password: ''
-      }
-    }
+        password: '',
+      },
+    };
   },
   methods: {
-    signin(){
+    signin() {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/admin/signin`;
-      vm.$http.post(api, vm.user).then((response) => {
-        if(response.data.success){
+      vm.$http.post(api, vm.user).then((response) => {
+        if (response.data.success) {
           vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
           vm.$store.dispatch('setIsLogin', true);
           vm.$router.push('/admin/products');
-        }else{
+        } else {
           vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 <style scoped>
 html,

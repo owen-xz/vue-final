@@ -13,6 +13,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
 export default {
   name: 'Navbar',
   data() {
@@ -20,14 +21,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['messages'])
+    ...mapGetters(['messages']),
   },
   methods: {
     updateMessage(message, status) {
-      this.$store.dispatch('updateMessage', { message, status })
+      this.$store.dispatch('updateMessage', { message, status });
     },
     removeMessage(num) {
-      this.$store.dispatch('removeMessage', num)
+      this.$store.dispatch('removeMessage', num);
     },
     removeMessageWithTiming(timestamp) {
       const vm = this;
@@ -40,14 +41,7 @@ export default {
       }, 5000);
     },
   },
-  created() {
-    // 自定義名稱 'messsage:push'
-    // message: 傳入參數
-    // status: 樣式，預設值為 warning
-    this.$bus.$on('message:push', (message, status = 'warning') => {
-      this.updateMessage(message, status);
-    });
-  },
+
 };
 </script>
 

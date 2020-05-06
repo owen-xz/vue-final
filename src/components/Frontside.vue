@@ -4,7 +4,7 @@
     <Alert></Alert>
     <main>
       <router-view></router-view>
-    </main>  
+    </main>
     <Footer></Footer>
   </div>
 </template>
@@ -12,20 +12,21 @@
 <script>
 import Navbar from './Navbar.vue';
 import Footer from './Footer.vue';
-import Alert from './AlertMessage.vue'
+import Alert from './AlertMessage.vue';
+
 export default {
-  components:{
+  components: {
     Navbar,
     Footer,
-    Alert
+    Alert,
   },
-  data () {
+  data() {
     return {
-    }
+    };
   },
   methods: {
-  }
-}
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

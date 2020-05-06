@@ -17,12 +17,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in orders" @click="checkOrder(item.id)">
+                <tr v-for="item in orders" :key="item.id" @click="checkOrder(item.id)">
                   <td>{{ item.create_at | date }}</td>
                   <td>{{ item.id }}</td>
                   <td>
                     <ul class="list-unstyled">
-                      <li v-for="product in item.products">{{ product.product.title }} * {{product.qty}}</li>
+                      <li v-for="product in item.products" :key="product.id">
+                        {{ product.product.title }} * {{ product.qty }}
+                      </li>
                     </ul>
                   </td>
                   <td class="text-right pr-3">{{ item.total | currency }}</td>
@@ -37,7 +39,7 @@
           <div class="table-responsive d-md-none">
             <table class="table table-sm">
               <tbody>
-                <tr class="mobile-tr" v-for="item in orders">
+                <tr class="mobile-tr" v-for="item in orders" :key="item.id">
                   <table class="table table-borderless mt-3">
                     <tbody>
                       <tr>
@@ -52,7 +54,9 @@
                         <td>訂單內容</td>
                         <td>
                           <ul class="list-unstyled">
-                            <li v-for="product in item.products">{{ product.product.title }} * {{ product.qty }}</li>
+                            <li v-for="product in item.products" :key="product.id">
+                              {{ product.product.title }} * {{ product.qty }}
+                            </li>
                           </ul>
                         </td>
                       </tr>
@@ -67,7 +71,10 @@
                       </tr>
                       <tr>
                         <td colspan="2">
-                         <button class="btn btn-title btn-sm btn-block" @click="checkOrder(item.id)">查看詳情</button>
+                         <button class="btn btn-title btn-sm btn-block"
+                         @click="checkOrder(item.id)">
+                          查看詳情
+                        </button>
                         </td>
                       </tr>
                     </tbody>
@@ -76,12 +83,12 @@
               </tbody>
             </table>
           </div>
-          
+
 
           <Pagination class="d-flex justify-content-center mb-4"  @getPage="getOrders"></Pagination>
-          
+
         </div>
-      </div>  
+      </div>
      </div>
   </div>
 </template>
@@ -89,30 +96,31 @@
 <script>
 import { mapGetters } from 'vuex';
 import Pagination from '../../components/Pagination.vue';
+
 export default {
   components: {
-    'Pagination': Pagination
+    Pagination,
   },
-  data(){
+  data() {
     return {
-    }
+    };
   },
   computed: {
-    ...mapGetters(['orders', 'pagination'])
+    ...mapGetters(['orders', 'pagination']),
   },
   methods: {
-    getOrders(page = 1){
+    getOrders(page = 1) {
       this.$store.dispatch('getOrders', page);
     },
-    checkOrder(id){
-      this.$router.push(`/checkout/${id}`)
-    }
+    checkOrder(id) {
+      this.$router.push(`/checkout/${id}`);
+    },
   },
   created() {
     this.$store.dispatch('setRouteName', this.$route.name);
     this.getOrders();
   },
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
