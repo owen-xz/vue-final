@@ -19,10 +19,14 @@
             <div class="h5" v-if="cardData.price !== cardData.origin_price">
               {{ cardData.price | currency }}
             </div>
-            <a href="#" class="text-content h3 mb-0 ml-auto mr-3" @click.stop.prevent="setFavorite">
+            <a href="#" class="h3 mb-0 ml-auto mr-3 animated" :class="{'heartBeat': animated.like}"
+            @click.stop.prevent="setFavorite"
+            @mouseover="animated.like = true" @mouseleave="animated.like = false">
               <slot><i class="fa-heart" :class="likeColor"></i></slot>
             </a>
-            <a href="#" class="text-content h3 mb-0" @click.stop.prevent="addtoCart(cardData.id)">
+            <a href="#" class="h3 mb-0 animated" :class="{'heartBeat': animated.cart}"
+            @click.stop.prevent="addtoCart(cardData.id)"
+            @mouseover="animated.cart = true" @mouseleave="animated.cart = false">
               <slot><i class="fas fa-cart-plus"></i></slot>
             </a>
           </div>
@@ -37,6 +41,10 @@ export default {
   props: ['cardData', 'favoriteData'],
   data() {
     return {
+      animated: {
+        like: false,
+        cart: false,
+      },
     };
   },
   computed: {
@@ -57,6 +65,8 @@ export default {
     setFavorite() {
       this.$emit('setFavorite', this.cardData);
     },
+  },
+  mounted() {
   },
 };
 </script>

@@ -16,19 +16,26 @@
             <img src="../assets/images/logo.png" alt="" class="img-fluid h-100">
           </router-link>
           <div class="d-flex">
-            <router-link class="nav-link p-1 p-md-2" to="/products"
-            @click.native="changeCategory('所有商品')">
+            <router-link class="nav-link p-1 p-md-2 animated" :class="{'heartBeat': animated.store}"
+            to="/products" @click.native="changeCategory('所有商品')"
+            @mouseover.native="animated.store = true"
+            @mouseleave.native="animated.store = false">
               <i class="fas fa-store fa-2x"></i>
             </router-link>
-            <a href="#" class="nav-link p-1 p-md-2" data-toggle="modal"
-            data-target="#favoriteModal" style="position: relative">
+            <a href="#" class="nav-link p-1 p-md-2 animated" :class="{'heartBeat': animated.like}"
+            data-toggle="modal" data-target="#favoriteModal" style="position: relative"
+            @mouseover="animated.like = true"
+            @mouseleave="animated.like = false">
               <div class="bg-danger cart-num d-flex
               justify-content-center align-items-center text-white" v-if="favoriteNum>0">
                 {{ favoriteNum }}
               </div>
               <i class="fas fa-heart fa-2x"></i>
             </a>
-            <router-link class="nav-link p-1 p-md-2" to="/cart" style="position: relative">
+            <router-link class="nav-link p-1 p-md-2 animated" :class="{'heartBeat': animated.cart}"
+            to="/cart" style="position: relative"
+            @mouseover.native="animated.cart = true"
+            @mouseleave.native="animated.cart = false">
               <div class="bg-danger cart-num d-flex
               justify-content-center align-items-center text-white" v-if="cartNum>0">
                 {{ cartNum }}
@@ -36,7 +43,10 @@
               <i class="fas fa-shopping-cart fa-2x"></i>
             </router-link>
             <slot>
-              <router-link class="nav-link p-1 p-md-2" to="/admin/products">
+              <router-link class="nav-link p-1 p-md-2 animated"
+              :class="{'heartBeat': animated.system}" to="/admin/products"
+              @mouseover.native="animated.system = true"
+              @mouseleave.native="animated.system = false">
                 <i class="fas fa-cog fa-2x"></i>
               </router-link>
             </slot>
@@ -137,6 +147,12 @@ export default {
     return {
       subscribeEmail: '',
       isValid: false,
+      animated: {
+        store: false,
+        like: false,
+        cart: false,
+        system: false,
+      },
     };
   },
   computed: {

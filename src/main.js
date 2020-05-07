@@ -5,6 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import 'bootstrap';
+import 'animate.css/animate.min.css';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import {

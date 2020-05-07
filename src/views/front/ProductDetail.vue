@@ -89,6 +89,7 @@ export default {
   data() {
     return {
       qty: 1,
+      swiper: '',
       swiperIsReady: false,
     };
   },
@@ -114,7 +115,7 @@ export default {
       this.qty = parseInt(event.target.value, 10);
     },
     swiperInit() {
-      new Swiper('.swiper-container', {
+      this.swiper = new Swiper('.swiper-container', {
         direction: 'horizontal',
         autoplay: true,
         slidesPerView: 2,

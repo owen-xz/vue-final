@@ -302,6 +302,8 @@ export default {
         num: 1,
         isVegetarian: false,
       },
+      swiperBanner: '',
+      swiperHot: '',
       swiperIsReady: false,
     };
   },
@@ -320,7 +322,7 @@ export default {
       this.$store.dispatch('updateMessage', { message: '訂位成功', status: 'success' });
     },
     swiperInit() {
-      new Swiper('.swiper-hot', {
+      this.swiperHot = new Swiper('.swiper-hot', {
         slidesPerView: 2,
         spaceBetween: 10,
         autoplay: true,
@@ -343,7 +345,7 @@ export default {
     },
   },
   mounted() {
-    new Swiper('.swiper-banner', {
+    this.swiperBanner = new Swiper('.swiper-banner', {
       direction: 'horizontal',
       loop: true,
       autoplay: {
