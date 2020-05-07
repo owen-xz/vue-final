@@ -53,7 +53,7 @@
             <div class="row justify-content-end">
               <div class="col-md-6 text-md-title">
                 <h3 class="text-center mt-3 pb-3 border-bottom border-title"><b>專業的師傅</b></h3>
-                <ul class="list-unstyled">
+                <ul class="list-unstyled d-none d-md-block">
                   <li class="mt-4">
                     <div class="d-flex mt-4">
                       <div class="mr-3">
@@ -90,6 +90,60 @@
                       <div>
                         <h4>堅持每個細節</h4>
                         <p class="text-content">
+                          從醋米的溫度，到醃魚的時間長短，都堅持由師傅親自監督。
+                          根據顧客的用餐習慣做調整，堅持提供顧客最高的餐點品質。
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+
+                <ul class="list-unstyled d-md-none">
+                  <li class="mt-4">
+                    <div class="d-flex mt-4">
+                      <div class="mr-3">
+                        <h4><i class="far fa-check-square"></i></h4>
+                      </div>
+                      <div>
+                        <a class="h4 text-title" href="#skill" data-toggle="collapse">
+                          最道地的技術
+                          <i class="fas fa-caret-down animated infinite bounceIn"></i>
+                        </a>
+                        <p class="text-content collapse mt-3" id="skill">
+                          師傅十三歲赴日本拜師學藝，從打雜、刮魚鱗、取內臟，再到洗米煮飯、切生魚片，
+                          總共經過八年的努力與無數次的鑽研，造就最道地的壽司技術。
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="d-flex mt-4">
+                      <div class="mr-3">
+                        <h4><i class="far fa-check-square"></i></h4>
+                      </div>
+                      <div>
+                        <a class="h4 text-title" href="#experience" data-toggle="collapse">
+                          超過十年的實務經驗
+                          <i class="fas fa-caret-down animated infinite bounceIn"></i>
+                        </a>
+                        <p class="text-content collapse mt-3" id="experience">
+                          回到台灣後，在知名日本料理店內擔任廚師，也持續精進自己的料理水平。
+                          將日本的技術與台灣在地食材做結合，打造最符合台灣人口味的壽司。
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="d-flex mt-4">
+                      <div class="mr-3">
+                        <h4><i class="far fa-check-square"></i></h4>
+                      </div>
+                      <div>
+                        <a class="h4 text-title" href="#detail" data-toggle="collapse">
+                          堅持每個細節
+                          <i class="fas fa-caret-down animated infinite bounceIn"></i>
+                        </a>
+                        <p class="text-content collapse mt-3" id="detail">
                           從醋米的溫度，到醃魚的時間長短，都堅持由師傅親自監督。
                           根據顧客的用餐習慣做調整，堅持提供顧客最高的餐點品質。
                         </p>
