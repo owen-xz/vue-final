@@ -6,22 +6,25 @@
         <i class="fas fa-sign-out-alt fa-2x"></i>
       </router-link>
     </Navbar>
-    <div class="row no-gutters">
+    <main class="row no-gutters">
       <Sidebar class="col-lg-2"></Sidebar>
       <router-view class="px-4 col-lg-10"></router-view>
-    </div>
+    </main>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Navbar from './Navbar.vue';
 import Sidebar from './DashboardSidebar.vue';
+import Footer from './Footer.vue';
 import Alert from './AlertMessage.vue';
 
 export default {
   components: {
     Navbar,
     Sidebar,
+    Footer,
     Alert,
   },
   data() {

@@ -106,11 +106,10 @@
                   <label for="customFile">或 上傳圖片
                     <i class="fas fa-spinner fa-spin" v-if="status.fileUploading"></i>
                   </label>
-                  <input type="file" id="customFile" class="form-control"
-                    ref="files" @change="uploadFile">
+                  <input type="file" id="customFile" ref="files" @change="uploadFile">
                 </div>
                 <img img="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=828346ed697837ce808cae68d3ddc3cf&auto=format&fit=crop&w=1350&q=80"
-                  class="img-fluid" :src="tempProduct.imageUrl" alt="">
+                  class="img-fluid mb-3" :src="tempProduct.imageUrl" alt="">
               </div>
               <div class="col-sm-8">
                 <div class="form-group">

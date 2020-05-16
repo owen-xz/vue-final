@@ -64,7 +64,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body p-4" v-if="isValid === false">
+          <div class="modal-body py-4" v-if="isValid === false">
             立即訂閱我們，請在下方留下您的Email，就不會錯過任何最新消息，並能獲取餐點折扣碼唷！！
             <ValidationObserver class="mt-4" @submit.prevent="receiveDiscount"
             v-slot="{ invalid }" tag="form">
@@ -73,7 +73,11 @@
                 placeholder="Email" v-model="subscribeEmail" required>
                 <span class="text-danger" v-if="failed">必須是有效的電子郵件地址</span>
                 <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-primary mt-4 booking-btn"
+                  <button type="submit"
+                  class="btn btn-primary mt-4 booking-btn d-none d-md-inline"
+                  :disabled="invalid" @click="isValid = true">訂閱</button>
+                  <button type="submit"
+                  class="btn btn-primary mt-4 booking-btn btn-block d-md-none"
                   :disabled="invalid" @click="isValid = true">訂閱</button>
                 </div>
               </ValidationProvider>
@@ -101,11 +105,12 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body py-4">
             <div class="table-responsive" v-if="favorite.length">
               <table class="table table-hover">
                 <tbody>
                   <tr v-for="item in favorite" :key="item.id" style="cursor: pointer"
+                  class="border-bottom"
                   @click="goProductDetail(item.id)">
                     <td class="align-middle" width="50">
                       <button class="btn btn-outline-danger btn-sm"
@@ -126,8 +131,12 @@
               </table>
             </div>
             <div class="text-center" v-else>
-              目前沒有商品喔
-              <router-link to="/products" class="btn btn-online text-title d-block mt-3"
+              <h5 class="mb-4">目前沒有商品喔</h5>
+              <router-link to="/products" class="btn btn-online text-title d-none d-md-inline"
+              data-dismiss="modal">
+                前往購物
+              </router-link>
+              <router-link to="/products" class="btn btn-online text-title btn-block d-md-none"
               data-dismiss="modal">
                 前往購物
               </router-link>

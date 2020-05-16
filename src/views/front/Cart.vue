@@ -6,7 +6,12 @@
           <h1 class="text-center h2 bg-desktop p-4 mt-4">您的購物車</h1>
           <div class="text-center my-4" v-if="cart.carts == 0">
             <p class="text-content m-4">目前沒有商品喔</p>
-            <router-link class="btn btn-title" to="/products">繼續逛逛</router-link>
+            <router-link class="btn btn-online text-title d-none d-md-inline" to="/products">
+              繼續逛逛
+            </router-link>
+            <router-link class="btn btn-online text-title btn-block d-md-none" to="/products">
+              繼續逛逛
+            </router-link>
           </div>
           <div v-else>
             <table class="table mt-4 table-hover">
@@ -22,7 +27,7 @@
                 @click="goProductDetail(item.product.id)" style="cursor: pointer">
                   <td class="align-middle p-0" width="20">
                     <a href="#" class="p-2 text-danger"
-                    @click.prevent.stop="removeCartItem(iem.id)">
+                    @click.prevent.stop="removeCartItem(item.id)">
                       <i class="fas fa-times-circle"></i>
                     </a>
                   </td>
@@ -96,9 +101,19 @@
               </tfoot>
             </table>
 
-            <div class="text-center mb-4">
-              <router-link class="btn btn-title mr-2" to="/products">繼續逛逛</router-link>
-              <a href="#" class="btn btn-online" @click.prevent="checkout" >前往結帳</a>
+            <div class="d-flex mb-4 justify-content-center">
+              <router-link class="btn btn-title mr-2 d-none d-md-block" to="/products">
+                繼續逛逛
+              </router-link>
+              <a href="#" class="btn btn-online d-none d-md-block" @click.prevent="checkout">
+                前往結帳
+              </a>
+              <router-link class="btn btn-title mr-2 w-100 d-md-none" to="/products">
+                繼續逛逛
+              </router-link>
+              <a href="#" class="btn btn-online w-100 d-md-none" @click.prevent="checkout">
+                前往結帳
+              </a>
             </div>
           </div>
         </div>

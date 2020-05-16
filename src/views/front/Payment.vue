@@ -98,7 +98,12 @@
             </div>
           </div>
           <div class="text-center mb-4" v-if="!order.is_paid">
-            <button class="btn btn-online px-4 py-2" @click="payOrder">確認付款去</button>
+            <button class="btn btn-online px-4 py-2 d-none d-md-inline" @click="payOrder">
+              確認付款去
+            </button>
+            <button class="btn btn-online px-4 py-2 btn-block d-md-none" @click="payOrder">
+              確認付款去
+            </button>
           </div>
         </div>
       </div>

@@ -166,7 +166,12 @@
                     cols="30" rows="10" v-model="form.message"></textarea>
                 </div>
                 <div class="text-center">
-                  <button class="btn btn-online px-4 py-2 booking-btn" :disabled="invalid">
+                  <button class="btn btn-online px-4 py-2 booking-btn d-none d-md-inline"
+                  :disabled="invalid">
+                    送出訂單
+                  </button>
+                  <button class="btn btn-online px-4 py-2 booking-btn btn-block d-md-none"
+                  :disabled="invalid">
                     送出訂單
                   </button>
                 </div>
