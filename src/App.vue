@@ -33,7 +33,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: $title;
 }
-
 .ad{
   margin-top: 91.8px;
   main{

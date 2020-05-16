@@ -10,19 +10,19 @@
           <i class="fas fa-times"></i>
         </a>
       </div>
-      <nav class="navbar navbar-expand-lg bg-light py-1">
+      <nav class="navbar navbar-expand-lg bg-light py-1 px-0">
         <div class="container-fluid">
           <router-link class="logo mr-auto" to="/" style="height: 45px">
             <img src="../assets/images/logo.png" alt="" class="img-fluid h-100">
           </router-link>
           <div class="d-flex">
-            <router-link class="nav-link p-1 p-md-2 animated" :class="{'heartBeat': animated.store}"
+            <router-link class="nav-link p-2 p-md-2 animated" :class="{'heartBeat': animated.store}"
             to="/products" @click.native="changeCategory('所有商品')"
             @mouseover.native="animated.store = true"
             @mouseleave.native="animated.store = false">
-              <i class="fas fa-store fa-2x"></i>
+              <i class="fas fa-store"></i>
             </router-link>
-            <a href="#" class="nav-link p-1 p-md-2 animated" :class="{'heartBeat': animated.like}"
+            <a href="#" class="nav-link p-2 p-md-2 animated" :class="{'heartBeat': animated.like}"
             data-toggle="modal" data-target="#favoriteModal" style="position: relative"
             @mouseover="animated.like = true"
             @mouseleave="animated.like = false">
@@ -30,9 +30,9 @@
               justify-content-center align-items-center text-white" v-if="favoriteNum>0">
                 {{ favoriteNum }}
               </div>
-              <i class="fas fa-heart fa-2x"></i>
+              <i class="fas fa-heart"></i>
             </a>
-            <router-link class="nav-link p-1 p-md-2 animated" :class="{'heartBeat': animated.cart}"
+            <router-link class="nav-link p-2 p-md-2 animated" :class="{'heartBeat': animated.cart}"
             to="/cart" style="position: relative"
             @mouseover.native="animated.cart = true"
             @mouseleave.native="animated.cart = false">
@@ -40,14 +40,14 @@
               justify-content-center align-items-center text-white" v-if="cartNum>0">
                 {{ cartNum }}
               </div>
-              <i class="fas fa-shopping-cart fa-2x"></i>
+              <i class="fas fa-shopping-cart"></i>
             </router-link>
             <slot>
-              <router-link class="nav-link p-1 p-md-2 animated"
+              <router-link class="nav-link p-2 p-md-2 animated"
               :class="{'heartBeat': animated.system}" to="/admin/products"
               @mouseover.native="animated.system = true"
               @mouseleave.native="animated.system = false">
-                <i class="fas fa-cog fa-2x"></i>
+                <i class="fas fa-cog"></i>
               </router-link>
             </slot>
           </div>
@@ -127,7 +127,8 @@
             </div>
             <div class="text-center" v-else>
               目前沒有商品喔
-              <router-link to="/products" class="btn btn-online text-title d-block mt-3">
+              <router-link to="/products" class="btn btn-online text-title d-block mt-3"
+              data-dismiss="modal">
                 前往購物
               </router-link>
             </div>
@@ -192,7 +193,7 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style lang="scss" scoped>
 .ad-discount{
   position: relative;
@@ -219,6 +220,9 @@ export default {
 }
 .booking-btn:disabled{
   cursor: not-allowed;
+}
+i {
+  font-size: 28px;
 }
 
 </style>

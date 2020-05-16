@@ -6,7 +6,7 @@
           <h1 class="text-center h2 bg-desktop p-4 mt-4">您的購物車</h1>
           <div class="text-center my-4" v-if="cart.carts == 0">
             <p class="text-content m-4">目前沒有商品喔</p>
-            <router-link class="btn btn-title px-4 py-2" to="/products">繼續逛逛</router-link>
+            <router-link class="btn btn-title" to="/products">繼續逛逛</router-link>
           </div>
           <div v-else>
             <table class="table mt-4 table-hover">
@@ -15,18 +15,18 @@
                   <th scope="col"></th>
                   <th scope="col"></th>
                   <th scope="col">品名</th>
-                  <th scope="col" width="140">數量</th>
+                  <th scope="col" width="150">數量</th>
                   <th scope="col" width="80">單價</th>
                 </tr>
-                <tr class="" v-for="item in cart.carts" :key="item.id"
+                <tr v-for="item in cart.carts" :key="item.id"
                 @click="goProductDetail(item.product.id)" style="cursor: pointer">
-                  <!--PC版-->
-                  <td class="align-middle" width="30">
-                    <button type="button" class="btn btn-outline-danger btn-sm"
-                     @click.stop="removeCartItem(item.id)">
-                      <i class="fas fa-trash-alt"></i>
-                    </button>
+                  <td class="align-middle p-0" width="20">
+                    <a href="#" class="p-2 text-danger"
+                    @click.prevent.stop="removeCartItem(iem.id)">
+                      <i class="fas fa-times-circle"></i>
+                    </a>
                   </td>
+                  <!--PC版-->
                   <td class="d-none d-md-table-cell align-middle" width="120" height="120">
                     <img class="img-fluid" :src="item.product.imageUrl" alt="">
                   </td>
@@ -35,13 +35,15 @@
                   </td>
                   <td class="align-middle d-none d-md-table-cell">
                     <div class="d-flex align-items-center">
-                      <a href="#" class="btn btn-sm btn-title p-0 mr-2"
-                      style="width: 25px; height: 25px"
-                      @click.prevent.stop="changeQty(item, '-')">-</a>
+                      <a href="#" class="p-2"
+                      @click.prevent.stop="changeQty(item, '-')">
+                        <i class="fas fa-minus-circle"></i>
+                      </a>
                       {{ item.qty }}/{{ item.product.unit }}
-                      <a href="#" class="btn btn-sm btn-title p-0 ml-2"
-                      style="width: 25px; height: 25px"
-                      @click.prevent.stop="changeQty(item, '+')">+</a>
+                      <a href="#" class="p-2"
+                      @click.prevent.stop="changeQty(item, '+')">
+                        <i class="fas fa-plus-circle"></i>
+                      </a>
                     </div>
                   </td>
                   <td class="align-middle text-right d-none d-md-table-cell">
@@ -63,15 +65,17 @@
                         </tr>
                         <tr>
                           <td class="p-1">數量</td>
-                          <td class="p-1 align-middle text-right" width="120">
+                          <td class="p-1 align-middle text-right" width="130">
                             <div class="d-flex align-items-center justify-content-end">
-                              <a href="#" class="btn btn-sm btn-title p-0 mr-2"
-                              style="width: 25px; height: 25px"
-                              @click.prevent.stop="changeQty(item, '-')">-</a>
+                              <a href="#" class="p-2"
+                              @click.prevent.stop="changeQty(item, '-')">
+                                <i class="fas fa-minus-circle"></i>
+                              </a>
                               {{ item.qty }}/{{ item.product.unit }}
-                              <a href="#" class="btn btn-sm btn-title p-0 ml-2"
-                              style="width: 25px; height: 25px"
-                              @click.prevent.stop="changeQty(item, '+')">+</a>
+                              <a href="#" class="p-2"
+                              @click.prevent.stop="changeQty(item, '+')">
+                                <i class="fas fa-plus-circle"></i>
+                              </a>
                             </div>
                           </td>
                         </tr>
@@ -93,8 +97,8 @@
             </table>
 
             <div class="text-center mb-4">
-              <router-link class="btn btn-title px-4 py-2 mr-2" to="/products">繼續逛逛</router-link>
-              <a href="#" class="btn btn-online px-4 py-2" @click.prevent="checkout" >前往結帳</a>
+              <router-link class="btn btn-title mr-2" to="/products">繼續逛逛</router-link>
+              <a href="#" class="btn btn-online" @click.prevent="checkout" >前往結帳</a>
             </div>
           </div>
         </div>
@@ -166,7 +170,8 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+i {
+  font-size: 28px;
+}
 </style>

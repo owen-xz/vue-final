@@ -112,6 +112,18 @@
                   </table>
                 </div>
               </div>
+              <div class="form-group mb-4">
+                <label for="discount-code">✦ 點擊畫面上方領取折扣碼，和我們一同歡慶開幕吧！</label>
+                <div class="input-group">
+                  <input type="text" name="" id="discount-code" class="form-control"
+                  placeholder="請輸入優惠碼" v-model="coupon_code">
+                  <div class="input-group-append">
+                    <button class="btn btn-title" type="button" @click="addCouponCode">
+                      套用優惠碼
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="col-lg-6 col-md-8 pl-lg-5">
               <h3 class="text-center mb-4"><b>收件人資訊</b></h3>
@@ -152,18 +164,6 @@
                   <label for="comment">留言</label>
                     <textarea name="" id="comment" class="form-control"
                     cols="30" rows="10" v-model="form.message"></textarea>
-                </div>
-                <div class="form-group mb-4">
-                  <label for="discount-code">✦ 點擊畫面上方領取折扣碼，和我們一同歡慶開幕吧！</label>
-                  <div class="input-group input-group-sm">
-                    <input type="text" name="" id="discount-code" class="form-control"
-                    placeholder="請輸入優惠碼" v-model="coupon_code">
-                    <div class="input-group-append">
-                      <button class="btn btn-title" type="button" @click="addCouponCode">
-                        套用優惠碼
-                      </button>
-                    </div>
-                  </div>
                 </div>
                 <div class="text-center">
                   <button class="btn btn-online px-4 py-2 booking-btn" :disabled="invalid">
@@ -235,12 +235,10 @@ export default {
       });
     },
   },
-  created() {
-  },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 .booking-btn:disabled{
   cursor: not-allowed;

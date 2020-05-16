@@ -1,6 +1,6 @@
 <template>
   <div class="">
-     <div class="container-lg">
+    <div class="container-lg">
       <div class="row">
         <div class="col">
           <h1 class="text-center h2 my-4">我的訂單</h1>
@@ -83,13 +83,10 @@
               </tbody>
             </table>
           </div>
-
-
           <Pagination class="d-flex justify-content-center mb-4"  @getPage="getOrders"></Pagination>
-
         </div>
       </div>
-     </div>
+    </div>
   </div>
 </template>
 
@@ -123,7 +120,7 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 tr:hover{
   cursor: pointer;

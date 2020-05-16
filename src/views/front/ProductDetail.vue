@@ -79,7 +79,6 @@
 <script>
 import { mapGetters } from 'vuex';
 import Swiper from 'swiper/js/swiper.min';
-import 'swiper/css/swiper.min.css';
 import Card from '../../components/SimpleProductCard.vue';
 
 export default {
@@ -152,7 +151,7 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style lang="scss" scoped>
 .swiper-container {
     width: 100%;

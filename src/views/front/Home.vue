@@ -7,6 +7,8 @@
           <div class="swiper-slide banner3 bg-cover"></div>
       </div>
       <div class="swiper-pagination"></div>
+      <div class="swiper-button-next text-desktop"></div>
+      <div class="swiper-button-prev text-desktop"></div>
     </div>
 
     <div class="container-fluid mb-5">
@@ -43,7 +45,7 @@
     <section class="container-fluid p-0 mb-md-5" style="position: relative;">
       <div class="container">
         <div class="row justify-content-start">
-          <div class="col-xl-4 col-md-5 bg-cover introduction-image chef
+          <div class="col-md-4 bg-cover introduction-image chef
           d-none d-md-block rounded"></div>
         </div>
       </div>
@@ -105,7 +107,7 @@
                         <h4><i class="far fa-check-square"></i></h4>
                       </div>
                       <div>
-                        <a class="h4 text-title" href="#skill" data-toggle="collapse">
+                        <a class="h4 text-title py-2" href="#skill" data-toggle="collapse">
                           最道地的技術
                           <i class="fas fa-caret-down animated infinite bounceIn"></i>
                         </a>
@@ -122,7 +124,7 @@
                         <h4><i class="far fa-check-square"></i></h4>
                       </div>
                       <div>
-                        <a class="h4 text-title" href="#experience" data-toggle="collapse">
+                        <a class="h4 text-title py-2" href="#experience" data-toggle="collapse">
                           超過十年的實務經驗
                           <i class="fas fa-caret-down animated infinite bounceIn"></i>
                         </a>
@@ -139,7 +141,7 @@
                         <h4><i class="far fa-check-square"></i></h4>
                       </div>
                       <div>
-                        <a class="h4 text-title" href="#detail" data-toggle="collapse">
+                        <a class="h4 text-title py-2" href="#detail" data-toggle="collapse">
                           堅持每個細節
                           <i class="fas fa-caret-down animated infinite bounceIn"></i>
                         </a>
@@ -165,7 +167,7 @@
     <section class="container-fluid mb-md-5 p-0" style="position: relative;">
       <div class="container">
         <div class="row justify-content-end">
-          <div class="col-xl-4 col-md-5 bg-cover introduction-image freshfood
+          <div class="col-md-4 bg-cover introduction-image freshfood
           d-none d-md-block rounded"></div>
         </div>
       </div>
@@ -322,7 +324,8 @@
                 </div>
                 <div class="col">
                   <div class="d-flex justify-content-end mb-3">
-                    <button type="submit" class="btn btn-primary booking-btn" :disabled="invalid">
+                    <button type="submit" class="btn btn-primary booking-btn"
+                    :disabled="invalid">
                       預約
                     </button>
                   </div>
@@ -339,7 +342,6 @@
 <script>
 import { mapGetters } from 'vuex';
 import Swiper from 'swiper/js/swiper.min';
-import 'swiper/css/swiper.min.css';
 import Card from '../../components/SimpleProductCard.vue';
 
 export default {
@@ -409,6 +411,10 @@ export default {
         el: '.swiper-pagination',
         clickable: true,
       },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
     });
   },
   created() {
@@ -420,7 +426,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 $title: #3F5D45;
 $content: #8DA291;
@@ -453,7 +458,7 @@ $content: #8DA291;
   transform: scale(0.95);
 }
 .menu-link{
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .introduction-image{
@@ -482,6 +487,4 @@ $content: #8DA291;
     border-bottom: 1px solid $title;
   }
 }
-
-
 </style>
