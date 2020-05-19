@@ -26,7 +26,7 @@
                 <tr v-for="item in cart.carts" :key="item.id"
                 @click="goProductDetail(item.product.id)" style="cursor: pointer">
                   <td class="align-middle p-0" width="20">
-                    <a href="#" class="p-2 text-danger"
+                    <a href="#" class="p-2 text-danger d-inline-block"
                     @click.prevent.stop="removeCartItem(item.id)">
                       <i class="fas fa-times-circle"></i>
                     </a>
