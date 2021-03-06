@@ -36,6 +36,9 @@ export default {
       vm.$http.post(api, vm.user).then((response) => {
         if (response.data.success) {
           vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'success' });
+          const { token } = response.data;
+          const { expired } = response.data;
+          document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
           vm.$router.push('/admin/products');
         } else {
           vm.$store.dispatch('updateMessage', { message: response.data.message, status: 'danger' });
